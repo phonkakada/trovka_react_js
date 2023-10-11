@@ -41,11 +41,11 @@ const NavBar = ({ style }) => {
                         <i class="fa-regular fa-message text-2xl text-white"></i>
                         <i class="fa-regular fa-bell ml-5 text-2xl text-white"></i>
                         <div>
-                            <div onClick={()=> handleProfileMenu()} className="w-12 h-12 ml-5 rounded-full bg-blue-500  hover:cursor-pointer" onMouseOver={() => handleProfileMenu()}></div>
+                            <div onClick={() => handleProfileMenu()} className="w-12 h-12 ml-5 rounded-full bg-blue-500  hover:cursor-pointer" onMouseOver={() => handleProfileMenu()}></div>
                             <div id="profileMenu" className="hidden bg-white justify-around absolute flex-col ml-[-5%] h-[250%] text-center w-32 rounded-md shadow-sm shadow-blue-700 text-slate-600">
                                 <Link className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-user ml-5"></i><p className="ml-2">Profile</p></div></Link>
                                 <Link className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-gear ml-5"></i><p className="ml-2">Setting</p></div></Link>
-                                <Link onClick={() => HandleLogout()}  className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-right-from-bracket ml-5"></i><p className="ml-2">Logout</p></div></Link>
+                                <Link onClick={() => HandleLogout()} className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-right-from-bracket ml-5"></i><p className="ml-2">Logout</p></div></Link>
                             </div>
                         </div>
 
@@ -59,11 +59,11 @@ const NavBar = ({ style }) => {
 
 const handleProfileMenu = () => {
     const Menu = document.getElementById('profileMenu')
-    if(Menu){
-        if(Menu.classList.contains('hidden')){
+    if (Menu) {
+        if (Menu.classList.contains('hidden')) {
             Menu.classList.remove('hidden')
             Menu.classList.add('flex')
-        }else{
+        } else {
             Menu.classList.remove('flex')
             Menu.classList.add('hidden')
         }
@@ -74,10 +74,10 @@ const LoginUI = () => {
     return (
         <>
             <div className="relative">
-                <div className=" relative text-white"><p onClick={() => HandleLoginClick()} className="font-semibold text-xl" onMouseOver={() => HandleLoginClick()}> Login</p>
+                <div className=" hover:cursor-pointer relative text-white"><p onClick={() => HandleLoginClick()} className="font-semibold text-xl" onMouseOver={() => HandleLoginClick()}> Login</p>
                     <div className=" hidden mt-5  rounded-md absolute  w-36  bg-white shadow-blue-500 shadow-md flex-col ml-[-60px] text-slate-500  transition-all duration-200 
                 ease-in-out" id="loginList" onMouseOut={() => HandleLoginClick()}>
-                                            <Link to={signup}><p className="h-1/2 hover:bg-slate-600 hover:pr-10 flex  items-center hover:text-white hover:cursor-pointer"><i class="fa-solid fa-user-plus mr-3 ml-3"></i>Register</p></Link>
+                        <Link to={signup}><p className="h-1/2 hover:bg-slate-600 hover:pr-10 flex  items-center hover:text-white hover:cursor-pointer"><i class="fa-solid fa-user-plus mr-3 ml-3"></i>Register</p></Link>
                         <Link to={login}><p className="h-1/2 hover:bg-slate-600 hover:pr-10 flex  items-center hover:text-white hover:cursor-pointer"><i class="fa-solid fa-right-to-bracket mr-3 ml-3"></i>Login</p></Link>
 
                     </div>

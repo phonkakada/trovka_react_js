@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-const DropdownMenu = ({ arrayData, setValue, defaultValue , Type}) => {
+const DropdownMenu = ({ arrayData, setValue, defaultValue, Type }) => {
     let arr = [];
     arrayData.map((items, index) => (
-        arr.push(<div className="hover:bg-slate-500 h-10 items-center hover:text-white hover:cursor-pointer "><p key={index} className=" ml-5 w-[100%]" onClick={(e) => setValue(items)}>{items}</p></div>)
+        arr.push(<div className="hover:bg-slate-500 h-10 flex items-center hover:text-white hover:cursor-pointer  "><p key={index} className=" ml-5 w-full" onClick={(e) => setValue(items)}>{items}</p></div>)
     ))
     const [Display, setDisplay] = useState(false)
     const HandleClick = () => {
@@ -15,17 +15,19 @@ const DropdownMenu = ({ arrayData, setValue, defaultValue , Type}) => {
         }
     }
     return (
-        <div className=" bg-blue-200 h-[100%]  rounded-md pr-5 items-center" onClick={(e) => HandleClick()}>
-            <div className="items-center">
-                <div className="flex items-center mt-2 justify-evenly max-[960px]:justify-normal">
-                    <div className="items-center flex justify-center">
+        <div className=" bg-blue-200 w-full items-center" onClick={(e) => HandleClick()}>
+            <div className="w-full">
+                <div className="flex h-10 items-center ml-5 mr-5 justify-between w-full">
+                    <div className="items-center flex w-[80%] ">
                         {Type === "Location" && <i class="fa-solid fa-location-dot ml-4 text-blue-500"></i>}
                         {Type === "Price" && <i class="fa-solid fa-money-bill-wave ml-4 text-blue-500"></i>}
                         {Type === "Category" && <i class="fa-solid fa-house ml-4 text-blue-500"></i>}
                         {Type === "Condition" && <i class="fa-solid fa-box ml-4 text-blue-500"></i>}
-                        <p className="text-slate-500 ml-2">{defaultValue}</p>
+                        <p className="text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap">{defaultValue}</p>
                     </div>
-                 {!Display ? <i class="fa-solid fa-caret-down ml-10 text-blue-500"></i> : <i class="fa-solid fa-caret-up ml-10 text-blue-500"></i>}   
+                    <div className="mr-10">
+                        {!Display ? <i class="fa-solid fa-caret-down text-blue-500 w-[20%] "></i> : <i class="fa-solid  fa-caret-up text-blue-500 w-[40%]"></i>}
+                    </div>
                 </div>
             </div>
             {Display && <Menu arr={arr} />}
@@ -37,7 +39,7 @@ const DropdownMenu = ({ arrayData, setValue, defaultValue , Type}) => {
 }
 const Menu = ({ arr }) => {
     return (
-        <div className=" bg-blue-200 mt-5 shadow-md">
+        <div className=" bg-blue-100 mt-5 shadow-md">
             <div className="text-slate-500 h-[40vh] overflow-auto no-scrollbar">
                 {arr}
             </div>
