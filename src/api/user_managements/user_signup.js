@@ -4,11 +4,12 @@ import { API } from "../api_key";
 import {SetUUID , setToken} from '../../cookie/cookie'
 import { home } from "../../routes/string_routes";
 
-const Signup = async (Data, setInputError) => {
+const Signup = async (Data, setInputError , setLoading) => {
     const emailOrphoneData = Data.emailOrphone
     const password = Data.password
     const last_name = Data.last_name
     const first_name = Data.first_name
+    setLoading(true)
 
     const validateEmail = (emailOrphoneData) => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,7 +34,7 @@ const Signup = async (Data, setInputError) => {
 
     }
     if (CheckEmail()) {
-        EmailSignup(emailOrphoneData, password, first_name, last_name , setInputError)
+        EmailSignup(emailOrphoneData, password, first_name, last_name , setInputError , setLoading)
     } else {
         if (validatePhoneNumber(emailOrphoneData)) {
             setInputError('')
@@ -44,13 +45,14 @@ const Signup = async (Data, setInputError) => {
                 console.log(_)
             }
         } else {
+            setLoading(false)
             setInputError('Email and phone number is invalid')
         }
     }
 }
 
 
-const EmailSignup = async (email, password, first_name, last_name , setInputError) => {
+const EmailSignup = async (email, password, first_name, last_name , setInputError , setLoading) => {
     const Data = {
         email: email,
         password: password,
@@ -62,10 +64,12 @@ const EmailSignup = async (email, password, first_name, last_name , setInputErro
                 setToken(response.data.Message.token)
                 SetUUID(response.data.Message.uuid)
                 window.location.href = home
+                setLoading(false)
             }
         }).catch((e) => {
             if (e){
                 setInputError('Error, User exist !')
+                setLoading(false)
             }
         })
 }

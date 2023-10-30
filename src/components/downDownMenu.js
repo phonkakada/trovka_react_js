@@ -19,10 +19,10 @@ const DropdownMenu = ({ arrayData, setValue, defaultValue, Type }) => {
             <div className="w-full">
                 <div className="flex h-10 items-center ml-5 mr-5 justify-between w-full">
                     <div className="items-center flex w-[80%] ">
-                        {Type === "Location" && <i class="fa-solid fa-location-dot ml-4 text-blue-500"></i>}
-                        {Type === "Price" && <i class="fa-solid fa-money-bill-wave ml-4 text-blue-500"></i>}
-                        {Type === "Category" && <i class="fa-solid fa-house ml-4 text-blue-500"></i>}
-                        {Type === "Condition" && <i class="fa-solid fa-box ml-4 text-blue-500"></i>}
+                        {Type === "Location" && <i class="fa-solid fa-location-dot ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Price" && <i class="fa-solid fa-money-bill-wave ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Category" && <i class="fa-solid fa-house ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Condition" && <i class="fa-solid fa-box ml-4 mr-5 text-blue-500"></i>}
                         <p className="text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap">{defaultValue}</p>
                     </div>
                     <div className="mr-10">
@@ -39,8 +39,8 @@ const DropdownMenu = ({ arrayData, setValue, defaultValue, Type }) => {
 }
 const Menu = ({ arr }) => {
     return (
-        <div className=" bg-blue-100 mt-5 shadow-md">
-            <div className="text-slate-500 h-[40vh] overflow-auto no-scrollbar">
+        <div className=" bg-blue-100 shadow-md">
+            <div className="text-slate-500 h-[40vh] sticky overflow-auto no-scrollbar">
                 {arr}
             </div>
         </div>

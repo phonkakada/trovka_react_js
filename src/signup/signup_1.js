@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { login } from "../routes/string_routes";
 
 const FirstPage = ({ setPage, setfirstName, setlastName , last_name , first_name }) => {
+    document.addEventListener('keypress' , (e) => {
+        if (e.key === "Enter"){
+            setPage(2)
+        }
+    })
     return (
         <>
             <div class="bg-white w-full h-full flex items-center justify-center">

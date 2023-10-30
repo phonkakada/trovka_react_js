@@ -3,7 +3,7 @@ import { API } from '../api_key';
 import { emailLogin } from '../route_api';
 import { SetUUID, setToken } from '../../cookie/cookie';
 import { home } from '../../routes/string_routes';
-const HandleLogin = async (Data , onError) => {
+const HandleLogin = async (Data , onError , setLoading) => {
     const emailOrphoneData = Data.emailOrphone
     const password = Data.password
 
@@ -30,8 +30,9 @@ const HandleLogin = async (Data , onError) => {
 
     }
     if (CheckEmail()) {
-        EmailLogin({email : emailOrphoneData , password : password} , onError)
+        EmailLogin({email : emailOrphoneData , password : password} , onError , setLoading)
     } else {
+        
         if (validatePhoneNumber(emailOrphoneData)) {
             onError('')
             try {
@@ -40,24 +41,24 @@ const HandleLogin = async (Data , onError) => {
                 console.log(_)
             }
         } else {
+            setLoading(false)
             onError('! Email and phone number is invalid')
         }
     }
 }
 
-const EmailLogin = async (Data , orError) => {
-    const data = {
-        email : Data.email,
-        password : Data.password,
-    }
+const EmailLogin = async (Data , orError , setLoading) => {
+
     await axios.post(API + emailLogin , Data).then((e) => {
         if (e.status === 200){
-            setToken(e.data.Message.token)
-            SetUUID(e.data.Message.uuid)
+            // setToken(e.data.Message.token)
+            // SetUUID(e.data.Message.uuid)
             window.location.href = home
+            setLoading(false)
         }
     }).catch((e) => {
         orError("! Email or Phone number and password is incorrect")
+        setLoading(false)
     })
 }
 

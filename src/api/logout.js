@@ -6,8 +6,6 @@ const HandleLogout = () => {
     deleteUUID();
 
     window.location.href = home
-
-    alert()
 }
 
 export default HandleLogout

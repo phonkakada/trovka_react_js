@@ -1,14 +1,14 @@
 import React from "react";
 
-const DisplayAllFollowers = ({ UUID, Token }) => {
+const DisplayAllShares = ({ UUID, Token }) => {
     let arr = []
 
     for  (let i = 0 ; i < 10 ; i++){
-        arr.push(<Followers />)
+        arr.push(<Shares />)
     }
     return (
         <>
-            <p className="text-blue-500 sticky top-6 text-3xl font-bold ml-7 mt-5">Followers</p>
+            <p className="text-blue-500 sticky top-6 text-3xl font-bold ml-7 mt-5">Shares</p>
             <div>
                 {arr}
             </div>
@@ -16,7 +16,7 @@ const DisplayAllFollowers = ({ UUID, Token }) => {
     )
 }
 
-const Followers = ({ UUID }) => {
+const Shares = ({ UUID }) => {
     let image = "https://firebasestorage.googleapis.com/v0/b/personal-website-3a210.appspot.com/o/Pic.png?alt=media&token=fc9b7149-9c5c-4b97-b92e-11face24bf9d"
     let fromName = "PHON KAKADA"
     let date = "2019-09-24"
@@ -48,4 +48,4 @@ const Followers = ({ UUID }) => {
     )
 }
 
-export default DisplayAllFollowers
+export default DisplayAllShares

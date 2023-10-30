@@ -2,9 +2,9 @@ const Categories = [
     "Home",
     "Land",
     "Car",
+    "Motor",
     "Computer",
-    "Smart Home",
-   
+    "Phone",
     "Motor",
     "Bike",
     "Accessories",
@@ -17,6 +17,14 @@ const CarCategories =
         "MERCEDES-BENZ", "MG", "MITSUBISHI MOTORS", "NISSAN", "PEUGEOT", "PORSCHE", "ROLLS ROYCE", "SUZUKI", "TESLA",
         "TOYOTA", "VOLKSWAGEN", "Other"];
 
+const LaptopCategories = ["Macbook", "Asus", "Dell", "Desktop", "HP", "Lenovo", "Acer", "Microsoft", "MSI", "Samsung"];
+const PhoneCategory = ["IPhone", "Google Pixel", "HUAWEI", "Hornor", "NOKIA", "NOTHING phone", "OnePlus", "REALME", "SAMSUNG", "SONY", "TECNO", "Vivo", "XIAOMI" , "Other"]
+const MotorCategory = ["Honda", "Kawasaki", "Suzuki", "Yamaha"]
+const PropertiesCategories = ["Borey", "Condo", "House", "Land", "Penthouse", "Townhouse", "Villa"]
+const touch_screens  = [
+    "No",
+    "Yes"
+]
 function generateArrayOfYears() {
     
     var max = new Date().getFullYear()
@@ -47,6 +55,11 @@ const tax_types = [
     "Plate Number"
 ]
 
+const transmissions = [
+    "Automatic",
+    "Manual"
+]
+
 const chairs = () => {
     let arr = []
     for (let i = 0 ; i < 25 ; i++){
@@ -70,5 +83,8 @@ const warrantys = () => {
 
 module.exports = {generateArrayOfYears,tax_types ,
       Categories, CarCategories,
-      used,fuels,chairs , warrantys
+      used,fuels,chairs , warrantys,
+      LaptopCategories , PropertiesCategories,
+      MotorCategory, PhoneCategory,
+      transmissions,touch_screens
      }

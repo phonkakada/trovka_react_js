@@ -1,21 +1,61 @@
 import React, { useState } from 'react';
 import LoginImg from '../assets/images/house.jpg'
 import Lib from 'react-axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../routes/string_routes';
 import HandleLogin from '../api/user_managements/login';
+import LoadingSpinner from '../components/loading_spinner';
+import axios from 'axios';
+import { API } from '../api/api_key';
+import { login } from '../api/route_api';
 
 
 export default function Login() {
     document.title = "Login"
 
-    const [EmailorPhone, setEmailorPhone] = useState('');
-    const [Password, setPassword] = useState('')
-    const [onError, setonError] = useState('')
+    const Nav = useNavigate();
 
-    const Login = () => {
-        HandleLogin({ emailOrphone: EmailorPhone, password: Password }, setonError)
+    const [email, setemail] = useState(null)
+    const [password, setpassword] = useState(null)
+    const [onError, setonError] = useState('')
+    const [Loading, setLoading] = useState(false)
+
+    const Login = async () => {
+        setLoading(true)
+        // HandleLogin({ emailOrphone: EmailorPhone, password: Password }, setonError , setLoading )
+        const user_data = {
+            email: email,
+            password: password
+        }
+        if (email && password) {
+            await axios.post(API + login, user_data).then(async (response) => {
+                if (response.status === 200) {
+                    setLoading(false)
+                    console.log(response.data)
+
+                }
+            }).catch((e) => {
+                console.log(e)
+                setLoading(false)
+                setonError('Email and Password are invalid')
+            })
+        } else {
+            setonError('Email and Password Can\'t be empty')
+            setLoading(false)
+        }
+
     }
+
+    const GetCookie = async () => {
+        await axios.get(API + 'get_cookie').then((e) => {
+            if (e.status === 200) {
+                console.log(e.data)
+            }
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
+
 
     return (
         <div className="grid grid-color-1 sm:grid-cols-2 h-screen w-full">
@@ -33,16 +73,16 @@ export default function Login() {
                     <h1 className='text-4xl dark:text font-bold text-center'>Welcome Back!</h1>
                     <h1 className='text-sm dark:text-gray-500 text-center p-5 text-bold'>Welcome Back! Login with your data that you entered during registration.</h1>
 
-                    <label className=' text-gray-600'>Email or Phone number</label>
+                    <label className=' text-gray-600'>Email</label>
 
                     <div className='flex flex-col text-gray-500'>
-                        <input onChange={(E) => setEmailorPhone(E.target.value)} className='mt-2 p-2 border-b-2 focus:outline-none focus:border-blue-500' type="text" placeholder='Email or Phone number' />
+                        <input onChange={(e) => setemail(e.target.value)} className='mt-2 p-2 border-b-2 focus:outline-none focus:border-blue-500' autoComplete='on' type="email" placeholder='Email' />
                     </div>
 
                     <div className='flex flex-col text-gray-500'>
                         <label className='text-gray-600'>Password</label>
 
-                        <input onChange={(e) => setPassword(e.target.value)} className='mt-2 p-2 border-b-2 focus:outline-none focus:border-blue-500' type="password" id='password' placeholder='********' />
+                        <input onChange={(e) => setpassword(e.target.value)} className='mt-2 p-2 border-b-2 focus:outline-none focus:border-blue-500' type="password" id='password' placeholder='********' />
                         {onError !== '' && <p className='text-red-500 italic mt-2'>{onError}</p>}
                     </div>
                     <div className='flex justify-between text-gray-500 py-2'>
@@ -50,10 +90,12 @@ export default function Login() {
                         <button className='border-b-2 border-white focus:outline-none hover:border-blue-500'>Forget Password?</button>
                     </div>
                     <div>
-                        <button className='rounded-sm w-full my-5 py-2 bg-blue-700 text-white shadow-lg shadow-teal-500/50 hover:shadow-blue-500/40' onClick={() => Login()}>LOGIN</button>
+
+                        {Loading === false && <button className='rounded-sm w-full my-5 py-2 bg-blue-700 text-white shadow-lg shadow-teal-500/50 hover:shadow-blue-500/40' onClick={() => Login()}>LOGIN</button>}
+                        {Loading === true && <div className='rounded-sm w-full my-5  bg-blue-700 py-1 text-white shadow-lg shadow-teal-500/50 hover:shadow-blue-500/40 flex justify-center'><LoadingSpinner /></div>}
                     </div>
                     <div className='mt-2 flex justify-end items-center'>
-                        <p className='text-gray-500'>Don't have an account?</p>
+                        <p onClick={() =>GetCookie()} className='text-gray-500'>Don't have an account?</p>
                         <Link to={signup}><button className='border-white ml-2 flex text-sky-800 font-medium border-b-2 focus:outline-none hover:border-blue-500'>Sign Up</button></Link>
                     </div>
 

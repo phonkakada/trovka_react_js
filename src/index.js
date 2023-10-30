@@ -5,8 +5,10 @@ import RoutesManagement from './routes/routes';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+
     <RoutesManagement />
-  </React.StrictMode>
+
+  // </React.StrictMode>
 );
 

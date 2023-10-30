@@ -1,35 +1,32 @@
 import axios from "axios"
 import { API } from "../api_key"
-import { get_all_car, post_car } from "../route_api"
+import { get_all_car, get_all_motor, post_car } from "../route_api"
 import { useState } from "react"
 
 
 
-const GetAllCars = async (setstatus) => {
+const GetAllMotors = async (setstatus) => {
     let prices = [];
     let models = [];
     let images = [];
     let makes = [];
     let years = [];
     let Cc = [];
-    let Hp = [];
     let locations = [];
     let locationsLink = [];
-    let Ids = []
-
     let imgs = [];
+    let ids = []
 
-    await axios.get(API + get_all_car).then((response) => {
+    await axios.get(API + get_all_motor).then((response) => {
         for (let i = 0; i < response.data.length; i++) {
+            let id = response.data[i].Post.id
             let price = response.data[i].Post.price
             let model = response.data[i].Post.getinfo[0].model
             let make = response.data[i].Post.getinfo[0].make
             let year = response.data[i].Post.getinfo[0].year
-            let hp = response.data[i].Post.getinfo[0].hp
             let cc = response.data[i].Post.getinfo[0].cc
             let location = response.data[i].Post.locations[0].province
             let locationLink = response.data[i].Post.locations[0].locationLink
-            let Id = response.data[i].Post.id;
             for (let j = 0; j < response.data[i].Post.products.length; j++) {
                 let img = response.data[i].Post.products[j].product_image_url     
                 imgs.push(img)
@@ -41,10 +38,9 @@ const GetAllCars = async (setstatus) => {
             makes.push(make)
             years.push(year)
             Cc.push(cc)
-            Hp.push(hp)
             locations.push(location)
             locationsLink.push(locationLink)
-            Ids.push(Id)
+            ids.push(id)
         }
         setstatus(200);
 
@@ -53,10 +49,10 @@ const GetAllCars = async (setstatus) => {
     })
     return [prices, models ,
             makes , images ,
-            years , Hp,
+            years ,
             Cc , locations,
-            locationsLink , Ids]
+            locationsLink , ids]
 }
 
 
-export default GetAllCars
+export default GetAllMotors
