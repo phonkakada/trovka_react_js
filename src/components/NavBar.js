@@ -17,6 +17,7 @@ import kh_flag from "../assets/images/kh_flag.png";
 import en_flag from "../assets/images/en_flag.png";
 import axios from "axios";
 import { API } from "../api/api_key";
+import ProfileImg from "./profile_img";
 
 
 const NavBar = () => {
@@ -26,20 +27,8 @@ const NavBar = () => {
     const [last_name, setlast_name] = useState('')
     const [LoginStatus, setLoginStatus] = useState(null)
 
-    const GetCookie = async () => {
-        await axios.get(API + "get_cookie").then((response) => {
-            if (response.status === 200){
-                console.log(response.data);
-            }
-        }).catch((e) => {
-            console.log(e)
-        })
-    }
+ 
 
-    useEffect(() => {
-        GetCookie()
-    })
-    
     try {
         const language = localStorage.getItem('ln')
         if (!language) {
@@ -50,7 +39,7 @@ const NavBar = () => {
     }
 
     const GetInfo = async () => {
-        const data = await GetUserInformation();
+        const data = await GetUserInformation(setLoginStatus);
         setfullname(data[0])
         setprofileurl(data[1])
         setfirt_name(data[3])
@@ -71,18 +60,6 @@ const NavBar = () => {
     }, [])
 
 
-
-    const ProfileImg = () => {
-        return (
-            profile_url ? <>
-                <img className="object-cover rounded-full max-h-full max-w-full h-full w-full" src={profile_url}></img>
-            </> : <>
-                <div className="flex font-bold text-2xl text-white justify-center items-center w-full h-full">
-                    <p>{last_name ? (last_name[0] + "").toUpperCase() : ""}</p>
-                </div>
-            </>
-        )
-    }
 
     const LanaguageSelete = () => {
 
@@ -161,7 +138,7 @@ const NavBar = () => {
                             <div onClick={() => handleProfileMenu()} className="w-10 h-10 ml-5 relative rounded-full bg-stone-400  hover:cursor-pointer"  >
 
                                 <div className="absolute inset-0">
-                                    <ProfileImg />
+                                    <ProfileImg last_name={last_name} profile_url={profile_url} />
                                 </div>
                             </div>
                             <div onMouseOut={() => setTimeout(() => HandleCloseElement('profileMenu'), 4000)} onMouseOver={() => HandleDisplayElement('profileMenu')} id="profileMenu" className="hidden bg-white justify-around absolute flex-col ml-[-5%] h-[250%] text-center w-32 rounded-md shadow-sm shadow-blue-700 text-slate-600">

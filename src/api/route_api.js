@@ -17,6 +17,8 @@ const get_all_user_posts = "get_user_all_post/"
 const get_post_id = "get_post_id/"
 const login = "login";
 const signup = 'signup'
+const profile_upload = 'profile_upload'
+const get_product_by_make = "get_post_make"
 
 
-module.exports={get_all_car , signup , login , get_post_id , get_all_user_posts , get_all_phone , post_phone , get_user_info , get_all_computer , post_computer , get_all_motor , post_motor , post_car , phoneLogin ,  emailLogin , checkTokenUUID, signupwithEmail , signupwithPhone_number , getAdvertisement}
+module.exports={get_all_car , get_product_by_make , profile_upload , signup , login , get_post_id , get_all_user_posts , get_all_phone , post_phone , get_user_info , get_all_computer , post_computer , get_all_motor , post_motor , post_car , phoneLogin ,  emailLogin , checkTokenUUID, signupwithEmail , signupwithPhone_number , getAdvertisement}

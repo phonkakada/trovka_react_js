@@ -2,7 +2,7 @@ import Cookies from "universal-cookie";
 
 const cookie = new Cookies();
 const uuid  = 'uuid'
-const token = "token"
+const token = "jwt"
 
 const SetUUID = (UUID) => {
     cookie.set(uuid , UUID)

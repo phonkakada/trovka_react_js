@@ -1,7 +1,8 @@
-import axios from "axios"
+import axios, { Axios } from "axios"
 import { API } from "../../api/api_key"
 import { get_all_user_posts } from "../../api/route_api"
 import { GetUUID } from "../../cookie/cookie"
+import AxiosInsta from "../../api/axios"
 
 const { Component } = require("react")
 
@@ -16,7 +17,7 @@ class Posts extends Component {
 
 
     GetUserPosts = async () => {
-        await axios.get(API + get_all_user_posts + GetUUID()).then((response) => {
+        await AxiosInsta.get(get_all_user_posts + GetUUID()).then((response) => {
             if (response.status === 200) {
                 this.setState = ({ AllPostId: response.data.Message.id })
                 console.log(response.data.Message.id)

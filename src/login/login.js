@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import LoginImg from '../assets/images/house.jpg'
-import Lib from 'react-axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../routes/string_routes';
-import HandleLogin from '../api/user_managements/login';
 import LoadingSpinner from '../components/loading_spinner';
 import axios from 'axios';
 import { API } from '../api/api_key';
 import { login } from '../api/route_api';
+import { SetUUID, setToken } from '../cookie/cookie';
 
 
 export default function Login() {
@@ -27,11 +26,13 @@ export default function Login() {
             email: email,
             password: password
         }
+        console.log(user_data)
         if (email && password) {
-            await axios.post(API + login, user_data).then(async (response) => {
+            await axios.post(API + login, user_data).then((response) => {
                 if (response.status === 200) {
                     setLoading(false)
-                    console.log(response.data)
+                    setToken(response.data.Message.jwt)
+                    SetUUID(response.data.Message.uuid)
 
                 }
             }).catch((e) => {
@@ -45,17 +46,6 @@ export default function Login() {
         }
 
     }
-
-    const GetCookie = async () => {
-        await axios.get(API + 'get_cookie').then((e) => {
-            if (e.status === 200) {
-                console.log(e.data)
-            }
-        }).catch((e) => {
-            console.log(e)
-        })
-    }
-
 
     return (
         <div className="grid grid-color-1 sm:grid-cols-2 h-screen w-full">
@@ -95,7 +85,7 @@ export default function Login() {
                         {Loading === true && <div className='rounded-sm w-full my-5  bg-blue-700 py-1 text-white shadow-lg shadow-teal-500/50 hover:shadow-blue-500/40 flex justify-center'><LoadingSpinner /></div>}
                     </div>
                     <div className='mt-2 flex justify-end items-center'>
-                        <p onClick={() =>GetCookie()} className='text-gray-500'>Don't have an account?</p>
+                        <p className='text-gray-500'>Don't have an account?</p>
                         <Link to={signup}><button className='border-white ml-2 flex text-sky-800 font-medium border-b-2 focus:outline-none hover:border-blue-500'>Sign Up</button></Link>
                     </div>
 

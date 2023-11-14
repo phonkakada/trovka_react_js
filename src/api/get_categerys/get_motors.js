@@ -13,7 +13,7 @@ const GetAllMotors = async (setstatus) => {
     let years = [];
     let Cc = [];
     let locations = [];
-    let locationsLink = [];
+    let colors = [];
     let imgs = [];
     let ids = []
 
@@ -26,7 +26,7 @@ const GetAllMotors = async (setstatus) => {
             let year = response.data[i].Post.getinfo[0].year
             let cc = response.data[i].Post.getinfo[0].cc
             let location = response.data[i].Post.locations[0].province
-            let locationLink = response.data[i].Post.locations[0].locationLink
+            let color = response.data[i].Post.getinfo[0].color
             for (let j = 0; j < response.data[i].Post.products.length; j++) {
                 let img = response.data[i].Post.products[j].product_image_url     
                 imgs.push(img)
@@ -39,7 +39,7 @@ const GetAllMotors = async (setstatus) => {
             years.push(year)
             Cc.push(cc)
             locations.push(location)
-            locationsLink.push(locationLink)
+            colors.push(color)
             ids.push(id)
         }
         setstatus(200);
@@ -51,7 +51,7 @@ const GetAllMotors = async (setstatus) => {
             makes , images ,
             years ,
             Cc , locations,
-            locationsLink , ids]
+            colors , ids]
 }
 
 

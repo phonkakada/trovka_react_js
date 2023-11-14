@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SimpleImageSlider from "react-simple-image-slider";
-import { GoogleMap, useLoadScript, Marker, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, LoadScript, useJsApiLoader } from '@react-google-maps/api';
 import map_api from '../location/api_key';
 import axios from 'axios';
 import { API } from '../api/api_key';
-import { get_post_id } from '../api/route_api';
-import { view_post } from '../routes/string_routes';
+import { view_post, view_profile } from '../routes/string_routes';
 import { Categories } from '../assets/categories';
-
+import ProfileImg from '../components/profile_img';
+import LoadingScreen from '../components/Loadind_Screen';
+import RelativeProducts from './relative_products';
 
 const ViewPost = () => {
     const id = useParams();
     const post_id = id.id
-
 
     const [Make, setMake] = useState('')
     const [Model, setModel] = useState('')
@@ -21,6 +21,15 @@ const ViewPost = () => {
     const [Phones, setPhones] = useState([])
     const [Description, setDescription] = useState(null)
     const [post_category, set_post_category] = useState('')
+    const Nav = useNavigate();
+
+    const [UserProfile, setUserProfile] = useState({
+        first_name: null,
+        profile_img: null,
+        register_date: null,
+        last_name: null,
+        uuid: null
+    })
 
     const [Car, setCar] = useState({
         make: null,
@@ -80,24 +89,39 @@ const ViewPost = () => {
         color: null,
         touch_screen: null,
         screen: null,
-        battery : null,
+        battery: null,
     })
 
-    const [ProfileImg, setProfileImg] = useState('https://scontent.fpnh18-5.fna.fbcdn.net/v/t39.30808-1/348272726_804674541222031_5124110061736590998_n.jpg?stp=cp6_dst-jpg_p240x240&_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=N5dUItr6cKwAX9n9IIy&_nc_ht=scontent.fpnh18-5.fna&oh=00_AfA-k3GrnWV9iNl-6nJ-DyNWd1_vkDTPgur7JuUQf1FWvQ&oe=6541B9B6');
-    const [ProfileName, setProfileName] = useState('PHON KAKADA')
+
     const [Price, setPrice] = useState(null)
     const [Location, setLocation] = useState(null)
     const [LocationLink, setLocationLink] = useState(null)
 
     const GetPost = async () => {
+        for (const key in UserProfile){  // reset value 
+            setUserProfile({
+                key : null
+            })
+        }
         await axios.get(API + view_post + post_id).then((e) => {
             if (e.status === 200) {
                 const data = e.data.Message;
                 const info = data.getinfo[0];
+                const user = data.user_info
                 setPrice(data.price);
                 set_post_category(data.post_category)
                 setLocationLink(data.locations[0].locationLink)
                 setLocation(data.locations[0].location)
+
+                setUserProfile({
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    profile_img: user.profile_url,
+                    register_date: user.created_at,
+                    uuid: user.uuid
+                })
+
+                setMake(info.make)
 
                 setCar({
                     make: info.make,
@@ -115,21 +139,21 @@ const ViewPost = () => {
                 })
 
                 setPhone({
-                    make : info.make,
-                    model : info.model,
-                    used : info.used,
-                    ram : info.ram,
-                    storage : info.storage,
-                    screen : info.screen,
-                    touch_screen : info.touch_screen,
-                    cpu : info.cpu,
-                    gpu : info.gpu,
-                    battery : info.battery,
-                    rear_camera : info.rear_camera,
-                    front_camera : info.front_camera,
-                    year : info.year,
-                    color : info.color,
-                    warranty : info.warranty
+                    make: info.make,
+                    model: info.model,
+                    used: info.used,
+                    ram: info.ram,
+                    storage: info.storage,
+                    screen: info.screen,
+                    touch_screen: info.touch_screen,
+                    cpu: info.cpu,
+                    gpu: info.gpu,
+                    battery: info.battery,
+                    rear_camera: info.rear_camera,
+                    front_camera: info.front_camera,
+                    year: info.year,
+                    color: info.color,
+                    warranty: info.warranty
                 })
 
                 setMotor({
@@ -146,19 +170,19 @@ const ViewPost = () => {
 
                 setComputer({
                     make: info.make,
-                    model : info.model,
-                    ram : info.ram,
-                    storage : info.storage,
-                    used : info.used,
-                    cpu : info.cpu,
-                    gpu : info.gpu,
-                    touch_screen : info.touch_screen,
-                    speaker : info.speaker,
-                    screen : info.screen,
-                    warranty : info.warranty,
-                    year  : info.year,
-                    color : info.color,
-                    battery : info.battery
+                    model: info.model,
+                    ram: info.ram,
+                    storage: info.storage,
+                    used: info.used,
+                    cpu: info.cpu,
+                    gpu: info.gpu,
+                    touch_screen: info.touch_screen,
+                    speaker: info.speaker,
+                    screen: info.screen,
+                    warranty: info.warranty,
+                    year: info.year,
+                    color: info.color,
+                    battery: info.battery
                 })
 
                 setDescription(info.description)
@@ -183,7 +207,7 @@ const ViewPost = () => {
     }
     useEffect(() => {
         GetPost();
-    }, [])
+    }, [post_id])
 
     const DisplayImgs = () => {
         return (
@@ -237,22 +261,25 @@ const ViewPost = () => {
         }
     }
     const ProfileAndProduct = () => {
+        let price = (+(Price + "").split('.')[1]) > 0 ? Price : (Price + "").split(".")[0]
+
+        const HandleSeeProfile = (uuid) => {
+            Nav(`/${view_profile}${uuid}`)
+        }
         return (
             <>
                 <div className='w-full h-full mt-5 md:mt-0 md:ml-5'>
-                    <div className='flex items-center'>
-                        <div className='w-11'>
-                            <div>
-                                <img className='rounded-full' src={ProfileImg}></img>
-                            </div>
-
+                    <p className='font-bold font-Playpen text-xl bg-yellow-200 w-32 p-5 py-2 -skew-x-12 text-blue-700 whitespace-nowrap '>{price} $</p>
+                    <div onClick={() => HandleSeeProfile(UserProfile.uuid)} title={`View Profile's ${UserProfile.first_name} ${UserProfile.last_name} `} className='flex hover:cursor-pointer items-center mt-5'>
+                        <div className='flex items-center bg-cyan-400 h-10 w-10 rounded-full'>
+                            <ProfileImg profile_url={UserProfile.profile_img} last_name={UserProfile.last_name} />
                         </div>
-                        <div>
-                            <p className='ml-3 font-bold'>{ProfileName}</p>
+                        <div className='ml-4'>
+                            <p className='font-bold md:text-base'>{`${UserProfile.first_name} ${UserProfile.last_name}`}</p>
+                            <p className='font-thin italic text-sm'>{`Member Since : ${UserProfile.register_date.split('T')[0]}`}</p>
                         </div>
                     </div>
-                    <div className='mt-3 w-full h-full'>
-                        <p className='font-bold font-Playpen text-base text-blue-700'>{Price} $</p>
+                    <div className=' w-full h-full'>
                         <p className='p-5 pl-0 overflow-auto whitespace-nowrap text-ellipsis'><i className='fa-solid fa-location-dot mr-1'></i>Location : {Location} </p>
                         <Googlemap />
                     </div>
@@ -298,7 +325,7 @@ const ViewPost = () => {
                                 <li className='flex items-center mt-1 '><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Color</div><p className='ml-3'>{Car.color}</p></li>
                                 <hr className='mr-2 mt-1'></hr>
 
-                                <li className='flex mt-1 items-center'><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Chiar</div><p className='ml-3'>{Car.chair}</p></li>
+                                <li className='flex mt-1 items-center'><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Chair</div><p className='ml-3'>{Car.chair}</p></li>
                                 <hr className='mr-2 mt-1'></hr>
 
                                 <li className='flex mt-1 items-center'><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Fuel</div><p className='ml-3'>{Car.fuel}</p></li>
@@ -358,7 +385,7 @@ const ViewPost = () => {
                             <hr className='mr-2 mt-1'></hr>
 
                             <li className='flex mt-1 items-center'><div className='w-28 md:w-20 pt-1 pb-1 text-center text-white bg-slate-400'>Touch Screen</div><p className='ml-3'>{Phone.touch_screen}</p></li>
-                                <hr className='mr-2 mt-1'></hr>
+                            <hr className='mr-2 mt-1'></hr>
 
                         </ul>
                         <div className='flex w-full'>
@@ -390,7 +417,7 @@ const ViewPost = () => {
                                 <hr className='mr-2 mt-1'></hr>
 
                                 <li className='flex mt-1 items-center'><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Warranty</div><p className='ml-3'>{Phone.warranty}</p></li>
-                                
+
                             </ul>
                         </div>
                         <div></div>
@@ -407,7 +434,7 @@ const ViewPost = () => {
                             <hr className='mr-2 mt-1'></hr>
 
                             <li className='flex mt-1 items-center'><div className='w-28 md:w-20 pt-1 pb-1 text-center text-white bg-slate-400'>Touch Screen</div><p className='ml-3'>{Computer.touch_screen}</p></li>
-                                <hr className='mr-2 mt-1'></hr>
+                            <hr className='mr-2 mt-1'></hr>
 
                         </ul>
                         <div className='flex w-full'>
@@ -435,10 +462,10 @@ const ViewPost = () => {
                                 <li className='flex mt-1 items-center'><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Battery</div><p className='ml-3'>{Computer.battery} mAh</p></li>
                                 <hr className='mr-2 mt-1'></hr>
 
-                                
+
 
                                 <li className='flex mt-1 items-center'><div className='text-center pt-1 pb-1 w-28 md:w-20 text-white bg-slate-400'>Warranty</div><p className='ml-3'>{Computer.warranty}</p></li>
-                                
+
                             </ul>
                         </div>
                         <div></div>
@@ -452,6 +479,10 @@ const ViewPost = () => {
 
     const Googlemap = () => {
         const libraries = ['places']
+        const {isLoaded} = useJsApiLoader({
+            googleMapsApiKey : map_api,
+            libraries : libraries
+        })
         if (LocationLink) {
             const LatLng = LocationLink.split('/')
             const lat_long = {
@@ -459,27 +490,28 @@ const ViewPost = () => {
                 lng: +LatLng[LatLng.length - 1].split(',')[1],
 
             }
-
             return (
+            
                 <>
                     <div className='w-full relative h-full'>
-                        <LoadScript googleMapsApiKey={map_api} libraries={libraries}>
+                        {isLoaded && <div>
                             <div className='md:hidden'>
-                                <GoogleMap onClick={() => window.open(LocationLink, '_blank')} mapContainerStyle={{ width: '95%', height: `155px` }} center={lat_long} zoom={10}>
+                                <GoogleMap onClick={() => window.open(LocationLink, '_blank')} mapContainerStyle={{ width: '100%', height: `155px` }} center={lat_long} zoom={10}>
                                     <Marker position={lat_long} />
                                 </GoogleMap>
                             </div>
                             <div className='hidden md:block lg:hidden'>
-                                <GoogleMap onClick={() => window.open(LocationLink, '_blank')} mapContainerStyle={{ width: '85%', height: `210px` }} center={lat_long} zoom={10}>
+                                <GoogleMap onClick={() => window.open(LocationLink, '_blank')} mapContainerStyle={{ width: '95%', height: `200px` }} center={lat_long} zoom={10}>
                                     <Marker position={lat_long} />
                                 </GoogleMap>
                             </div>
                             <div className='w-full h-full hidden lg:block'>
-                                <GoogleMap onClick={() => window.open(LocationLink, '_blank')} mapContainerStyle={{ width: '85%', height: `300px` }} center={lat_long} zoom={10}>
+                                <GoogleMap onClick={() => window.open(LocationLink, '_blank')} mapContainerStyle={{ width: '85%', height: `273px` }} center={lat_long} zoom={10}>
                                     <Marker position={lat_long} />
                                 </GoogleMap>
                             </div>
-                        </LoadScript>
+                            </div>}
+
                     </div>
 
                 </>
@@ -504,11 +536,14 @@ const ViewPost = () => {
         }
     }
 
+    if (!UserProfile.first_name) {
+        return <LoadingScreen />
+    }
+
     return (
         <>
             <div className='ml-[5%] mt-5  mr-20 lg:m-20 lg:mt-10 w-[90%] h-full'>
-
-                <div className='md:flex '>
+                <div className='lg:flex '>
                     <div className='w-full h-[300px] sm:h-[500px] md:h-[350px] lg:h-[445px] '>
                         <ImagePreview />
                     </div>
@@ -520,6 +555,9 @@ const ViewPost = () => {
                 <div className='relative'>
                     <ProductInfo />
                     <ContactNumber />
+                    <div className='mt-10 pb-20'>
+                        <RelativeProducts make={Make} id={post_id} />
+                    </div>
                 </div>
             </div>
 

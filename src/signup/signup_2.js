@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { gotoSignupPage1, login } from "../routes/string_routes";
+import { Link, useNavigate } from "react-router-dom";
+import { gotoSignupPage1, home, login } from "../routes/string_routes";
 import Signup from "../api/user_managements/user_signup";
 import LoadingSpinner from "../components/loading_spinner";
 import axios from "axios";
 import { API } from "../api/api_key";
 import { signup } from "../api/route_api";
+import { SetUUID, setToken } from "../cookie/cookie";
 
 const SecondPage = ({ setPage, first_name, last_name }) => {
+    const Nav = useNavigate()
     const [EmailPhoneNumber, setEmailPhoneNumber] = useState('');
     const [Password, setPassword] = useState('');
     const [ConfirmPassword, setConfirmPassword] = useState('')
@@ -19,7 +21,6 @@ const SecondPage = ({ setPage, first_name, last_name }) => {
             await HandleSignup();
         }
     })
-
     const Data = {
         email: EmailPhoneNumber,
         password: Password,
@@ -28,21 +29,23 @@ const SecondPage = ({ setPage, first_name, last_name }) => {
 
     }
 
-    const CheckPasswordMatch = () => {
-        return Password === ConfirmPassword ? false : true
-    }
-    const HandleSignup = async () => {
+    const CheckPasswordMatch = () => !Password === ConfirmPassword
+    
 
+    const HandleSignup = async () => {
         if (CheckPasswordMatch()) {
             setInputError("Password not match !")
         } else {
             setInputError('')
-            await axios.post(API + signup , Data).then((response) => {
-                if (response.status === 200){
-                    console.log(response.data)
+            console.log(Data)
+            await axios.post(API + signup, Data).then((response) => {
+                if (response.status === 200) {
+                    setToken(response.data.Message.jwt)
+                    SetUUID(response.data.Message.uuid)
+                    window.location.href = home
                 }
             }).catch((e) => {
-                
+                console.log(e)
             })
         }
     }

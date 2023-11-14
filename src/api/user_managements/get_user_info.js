@@ -1,16 +1,16 @@
 import axios from "axios";
 import { API } from "../api_key";
 import { get_user_info } from "../route_api";
-import { GetUUID } from "../../cookie/cookie";
+import { GetToken } from "../../cookie/cookie";
 
-const GetUserInformation = async () => {
+const GetUserInformation = async (setLoginStatus) => {
     let profile_url = ""
     let full_name = "";
     let main_contact = ""
     let last_name = ""
     let first_name = ""
 
-    await axios.get(API + get_user_info + GetUUID()).then((e) => {
+    await axios.get(API + get_user_info + GetToken() , {headers: {'Authorization' : 'Bearer ' + GetToken()}}).then((e) => {
         if (e.status === 200) {
             full_name = e.data.Message.name
             profile_url = e.data.Message.profile_url
@@ -18,13 +18,14 @@ const GetUserInformation = async () => {
             last_name = e.data.Message.last_name
             first_name = e.data.Message.first_name
 
+            setLoginStatus(true)
         }
     }).catch((e) => {
-        // Handle Error
+        // console.log(e)
 
     })
 
-    return [full_name, profile_url, first_name, last_name, main_contact]
+    return [  full_name, profile_url, first_name, last_name, main_contact]
 
 }
 

@@ -17,16 +17,16 @@ const PostComputer = ({ fromData }) => {
     const [gpu, setgpu] = useState('')
     const [use, setuse] = useState(used[1])
     const [storage, setStorage] = useState()
-    const [watt, setWatt] = useState('')
+    const [battery, setbattery] = useState('')
     const [speaker, setSpeaker] = useState('')
     const [screen, setScreen] = useState('')
     const [touch_screen, settouch_Screen] = useState(touch_screens[0])
     fromData.append('model', model)
     fromData.append('make', make)
     fromData.append('warranty', warranty)
+    fromData.append('battery' , battery)
     fromData.append('year', year)
-    fromData.append('used', used)
-    fromData.append('watt', watt)
+    fromData.append('used', use)
     fromData.append('ram', ram)
     fromData.append('cpu', cpu)
     fromData.append('gpu', gpu)
@@ -66,7 +66,7 @@ const PostComputer = ({ fromData }) => {
                 </div>
 
                 <div className="mt-4 md:flex justify-between">
-                    <div className="md:w-1/2" ><InputValue setValue={setWatt} type={' Power (Watt)'} /></div>
+                    <div className="md:w-1/2" ><InputValue setValue={setbattery} type={'Battery (mAh)'} /></div>
                     <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2" ><InputValue setValue={setSpeaker} type={' Speaker (Watt)'} /></div>
                 </div>
                 <div className="md:flex mt-4 justify-between">

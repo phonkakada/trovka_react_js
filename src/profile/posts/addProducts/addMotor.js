@@ -21,10 +21,11 @@ const PostMotor = ({ fromData }) => {
             fromData.append('cc' , cc)
             fromData.append('warranty' , warranty)
             fromData.append('year' , year)
-            fromData.append('used' , used)
+            fromData.append('used' , use)
             fromData.append('color' , color)
             fromData.append('price' , price)
             fromData.append('tax_type' , tax_type)
+            fromData.append('transmission' , transmission)
     return (
         <>
             <div className="w-full h-full">

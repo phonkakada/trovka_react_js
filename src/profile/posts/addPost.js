@@ -17,6 +17,8 @@ import { ProvincesEnglishLanguage } from "../../assets/all_provinces";
 import PostMotor from "./addProducts/addMotor";
 import PostComputer from "./addProducts/addComputer";
 import PostPhone from "./addProducts/addPhone";
+import Axios from "../../api/axios";
+import AxiosInsta from "../../api/axios";
 
 const AddPost = () => {
     let Products = []
@@ -30,7 +32,7 @@ const AddPost = () => {
     const [phone_number, setphone_number] = useState([])
     const [Location, SetLocation] = useState('')
     const [province, setProvince] = useState(ProvincesEnglishLanguage[0])
-    const [description , setdescription] = useState('')
+    const [description, setdescription] = useState('')
 
     const fromData = new FormData();
 
@@ -44,13 +46,14 @@ const AddPost = () => {
         fromData.append("locationLink", LocationLink)
         fromData.append("location", Location)
         fromData.append('province', province)
-        fromData.append('description' , description)
+        fromData.append('phone_number', phone_number)
+        fromData.append('description', description)
         Images.map((item, index) => (
             fromData.append(`images${index}`, item)
         ))
 
         if (defaultValue === Categories[2]) {  // for car
-            await axios.post(API + post_car, fromData).then((response) => {
+            await Axios.post(post_car, fromData).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
@@ -61,37 +64,37 @@ const AddPost = () => {
             })
         }
         if (defaultValue === Categories[3]) { // for Motor
-            await axios.post(API + post_motor, fromData).then((response) => {
+            await AxiosInsta.post(post_motor, fromData).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
                 }
             }).catch((e) => {
-              
+               
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })
         }
-        if (defaultValue === Categories[4]){  // for Computer
-            await axios.post(API + post_computer, fromData).then((response) => {
+        if (defaultValue === Categories[4]) {  // for Computer
+            await Axios.post(post_computer, fromData).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
                 }
             }).catch((e) => {
-              
+
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })
         }
 
-        if (defaultValue === Categories[5]){
-            await axios.post(API + post_phone , fromData).then((response) => {
-                if (response.status === 200){
+        if (defaultValue === Categories[5]) {
+            await axios.post(API + post_phone, fromData).then((response) => {
+                if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
                 }
-            }).catch((e)=>{
+            }).catch((e) => {
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })

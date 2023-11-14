@@ -9,6 +9,7 @@ root.render(
 
     <RoutesManagement />
 
-  // </React.StrictMode>
+  //{/* </React.StrictMode> */}
 );
+
 

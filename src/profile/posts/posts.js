@@ -3,27 +3,21 @@ import NumberToK from "../../assets/NumberToK"
 import DisplayFullImage from "../../components/display_image_full"
 import { useEffect } from "react"
 import axios from "axios"
-import { API } from "../../api/api_key"
 import { get_all_user_posts, get_post_id } from "../../api/route_api"
 import { GetUUID } from "../../cookie/cookie"
 import { Categories } from "../../assets/categories"
+import AxiosInsta from "../../api/axios"
 
-
-let i = 1;
-let Added = false
 const DisplayAllPost = ({ profile, Name }) => {
-
     const [AllPostsId, setAllPostsId] = useState(null)
-    const [fetch, setfetch] = useState(false)
-    const [CurrentPage, setCurrentPage] = useState(0)
     const [Posts, SetPost] = useState([])
 
     const GetUserPosts = async () => {
-        await axios.get(API + get_all_user_posts + GetUUID()).then((response) => {
+        await AxiosInsta.get(get_all_user_posts + GetUUID()).then((response) => {
             if (response.status === 200) {
                 setAllPostsId(response.data.Message.id)
             }
-        }).catch(() => {
+        }).catch((e) => {
 
         })
     }
@@ -31,31 +25,16 @@ const DisplayAllPost = ({ profile, Name }) => {
         GetUserPosts();
     }, [])
 
-    const HandleNextPost = () => {
-        if (AllPostsId) {
-            if (CurrentPage < AllPostsId.length) {
-                SetPost([...Posts, <Post key={CurrentPage} Profile={profile} id={AllPostsId[CurrentPage]} CurrentPost={CurrentPage} name={Name} />])
-                setCurrentPage(CurrentPage + 1)
-            }
-        }
-    }
-
-    if (AllPostsId) {
-        if (CurrentPage !== 2 && CurrentPage <= 3) {
-            HandleNextPost();
-        }
-    }
-
-
     return (
         <>
-            <p className="text-blue-500 text-3xl font-bold ml-7 mt-5">Posts</p>
+            <p className="text-blue-500 text-3xl font-bold mt-5">Posts</p>
             <center>
 
                 <div className="w-[350px] h-[400px] sm:w-[500px] sm:h-[650px] md:w-[800px] md:h-[900px] xl:w-[1080px] xl:h-[1080px]">
-                    {Posts}
+                    {Posts.length === 0 && <div className="font-bold text-2xl text-blue-500 mt-20">No Post</div>}
+                    {Posts.length != 0 && Posts}
                 </div>
-                <button id="btn-next" onClick={() => HandleNextPost()}></button>
+                <button id="btn-next"></button>
                 <br className="pb-20"></br>
             </center>
         </>
@@ -81,7 +60,7 @@ const Post = ({ id, Profile, CurrentPost, Name }) => {
 
     useEffect(() => {
         const GetPost = async () => {
-            await axios.get(API + get_post_id + id).then((response) => {
+            await AxiosInsta.get(get_post_id + id).then((response) => {
                 if (response.status === 200) {
                     const data = response.data.Message
                     const product_info = data.getinfo[0]
@@ -113,16 +92,9 @@ const Post = ({ id, Profile, CurrentPost, Name }) => {
 
     let Date = "2023-09-20"
     let AnotherImage = imgs.length > 2 ? 5 : 5
-    let arr = []
-    let TotalLikes = 20000
-    let TotalUnlikes = 500
-    let TotalComments = 100
-    let TotalShares = 100
 
     let Hp = 383
     let CC = 5700
-    let Year = 2022
-    let Color = "White"
     let Tax = "Tax Paper"
 
     const [Display, setDisplay] = useState(false);
@@ -151,29 +123,6 @@ const Post = ({ id, Profile, CurrentPost, Name }) => {
         );
     }
 
-    window.addEventListener('scroll', () => {
-        const post = document.getElementById('post-' + CurrentPost)
-        const btn = document.getElementById('btn-next')
-
-        if (post) {
-            if (!isInViewport(post)) {
-                if (!Added) {
-                    if (btn) {
-                        // btn.click()
-
-                    }
-                    Added = true
-                    console.log("Add")
-                }
-
-            } else {
-                console.log("No Add")
-                Added = false
-            }
-        }
-    })
-
-
 
     return (
         <>
@@ -185,9 +134,7 @@ const Post = ({ id, Profile, CurrentPost, Name }) => {
                                 <div className="absolute inset-0">
                                     <Profile />
                                 </div>
-
                             </div>
-
                             <div className="items-center text-start ml-[4%] text-sm md:text-base xl:text-2xl">
                                 <p className="font-semibold">{Name}</p>
                                 <p className="font-extralight">{date.split('T')[0]}</p>
@@ -227,21 +174,21 @@ const Post = ({ id, Profile, CurrentPost, Name }) => {
                                     <li>Tax: {Tax}</li>
                                 </div>
                             }
-                              {category.toUpperCase() === Categories[3].toUpperCase() &&
+                            {category.toUpperCase() === Categories[3].toUpperCase() &&
                                 <div>
                                     <li>HP: {Hp}</li>
                                     <li>CC: {CC}</li>
                                     <li>Tax: {Tax}</li>
                                 </div>
                             }
-                              {category.toUpperCase() === Categories[4].toUpperCase() &&
+                            {category.toUpperCase() === Categories[4].toUpperCase() &&
                                 <div>
                                     <li>CPU: {cpu}</li>
                                     <li>GPU: {gpu}</li>
                                     <li>Ram: {ram} GB</li>
                                 </div>
                             }
-                            
+
 
                             <div className="text-start">
                                 <li>Year: {year}</li>
@@ -252,14 +199,6 @@ const Post = ({ id, Profile, CurrentPost, Name }) => {
                             </div>
                         </ul>
                     </div>
-                </div>
-                <div className="mt-[10%] text-center w-[10%] ml-2 h-full ">
-                    <ul className="text-[90%] text-blue-500 h-[80%] w-full flex flex-col justify-evenly top-10 sm:text-2xl">
-                        <li><i class="fa-regular fa-thumbs-up"></i><p className="text-[90%] font-light">{NumberToK(TotalLikes)}</p></li>
-                        <li><i class="fa-regular fa-thumbs-down"></i><p className="text-[90%] font-light">{NumberToK(TotalUnlikes)}</p></li>
-                        <li><i class="fa-regular fa-comment"></i><p className="text-[90%] font-light">{NumberToK(TotalComments)}</p></li>
-                        <li><i class="fa-solid fa-share"></i><p className="text-[90%] font-light">{NumberToK(TotalShares)}</p></li>
-                    </ul>
                 </div>
             </div>
             <hr className="mt-14 md:mt-5 xl:mt-10"></hr>
