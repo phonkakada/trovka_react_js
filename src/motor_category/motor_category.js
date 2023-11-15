@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { view_post } from "../routes/string_routes";
 import Post from "../components/Post_Img.js";
 import { Categories } from "../assets/categories.js";
+import LoadingScreen from "../components/Loadind_Screen.js";
 
-const MotorCategory = () => {
+const MotorCategory = ({data}) => {
 
     const Nav = useNavigate();
     const [status, setstatus] = useState(0)
@@ -21,9 +22,8 @@ const MotorCategory = () => {
     const [locations, setlocations] = useState([]);
     const [colors, setColors] = useState([]);
     const [Id , setId] = useState(null)
+
     useEffect(() => {
-        const getMotors = async () => {
-            const data = await GetAllMotors(setstatus);
             setprice(data[0])
             setModels(data[1])
             setmakes(data[2])
@@ -33,11 +33,7 @@ const MotorCategory = () => {
             setlocations(data[6])
             setColors(data[7])
             setId(data[8])
-        }
-        getMotors();
     }, [])
-
-
 
     let arr = []
     prices.map((items, index) => (

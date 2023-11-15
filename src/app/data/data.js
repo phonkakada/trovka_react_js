@@ -1,21 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = {
+  AnotherProfile : null,
+  MyProfile : null,
+  LoginState : null, 
+  HomeData : false
+}
 
 export const AppData = createSlice({
-    name : 'trovka',
-    initialState: {
-        profile : [],
-        value : 0
+  name: 'trovka',
+  initialState,
+  reducers: {
+    setAnotherProfile : (state , action) => {
+        state.AnotherProfile = action.payload
     },
-    reducers:{
-        setProfile : (state , action) => {
-            state.profile = action.payload
-        },
-        IncreaseValue : (state) => {
-            state.value += 1;
-        }
+    setMyProfile : (state , action) => {
+        state.MyProfile = action.payload
+    },
+    setLoginState : (state , action) => {
+        state.LoginState = action.payload
+    },
+    setHomeData : (state) => {
+        state.HomeData = true
     }
+  },
 })
 
-export const {setProfile , IncreaseValue} = AppData.actions
+// Action creators are generated for each case reducer function
+export const { setAnotherProfile, setMyProfile, setLoginState , setHomeData } = AppData.actions
 
 export default AppData.reducer

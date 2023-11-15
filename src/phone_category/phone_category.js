@@ -6,7 +6,7 @@ import GetAllComputers from "../api/get_categerys/get_all_computers";
 import GetAllPhones from "../api/get_categerys/get_all_phones";
 import IsEnglish from "../components/language";
 
-const MotorCategory = () => {
+const MotorCategory = ({data}) => {
 
     const [status, setstatus] = useState(0)
     const [prices, setprice] = useState([])
@@ -21,8 +21,7 @@ const MotorCategory = () => {
     const [locationsLink, setlocationsLink] = useState([]);
     const [Id , setId] = useState(null)
     useEffect(() => {
-        const getMotors = async () => {
-            const data = await GetAllPhones(setstatus);
+      
             setprice(data[0])
             setModels(data[1])
             setmakes(data[3])
@@ -33,8 +32,6 @@ const MotorCategory = () => {
             setlocations(data[7])
             setlocationsLink(data[8])
             setId(data[12])
-        }
-        getMotors();
     }, [])
 
 

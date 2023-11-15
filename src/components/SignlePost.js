@@ -5,6 +5,7 @@ import { get_post_id } from '../api/route_api';
 import DisplayFullImage from './display_image_full';
 import { Categories } from '../assets/categories';
 import { useSelector } from 'react-redux';
+import { setAnotherProfile } from '../app/data/data';
 
 
 const Post = ({ id, Profile, category, Name, Owner = false }) => {
@@ -18,6 +19,8 @@ const Post = ({ id, Profile, category, Name, Owner = false }) => {
         year: '2021',
         color: 'White',
     })
+
+
 
     const [Car, setCar] = useState({
         Hp: 389,
@@ -40,7 +43,11 @@ const Post = ({ id, Profile, category, Name, Owner = false }) => {
         Front_Camera: null,
     })
 
-    const value = useSelector((state) => state.trovka.value)
+    const profile = useSelector((state) => state.data.AnotherProfile)
+
+    const UserInfo = {
+        profile_img : profile.profile_img,
+    }
 
 
     useEffect(() => {

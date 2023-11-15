@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Post from '../components/SignlePost';
 import ProfileImg from '../components/profile_img';
-
+import { useDispatch } from 'react-redux';
+import { setAnotherProfile } from '../app/data/data';
 const ViewProfile = () => {
     const id = useParams();
     const uuid = id.uuid;
@@ -11,7 +12,7 @@ const ViewProfile = () => {
     const [Regster, setRegister] = useState('2023-11-14')
     const [Email, setEmail] = useState('phonkakada@icloud.com')
     const [Phone, setPhone] = useState('089261500')
-
+    const dispatch = useDispatch();
     const [UserInfo , setUserInfo] = useState({
         profile_img : 'https://storage.googleapis.com/trovka_image/photo_2023-09-16_11-40-21.jpg',
         last_name : null,
@@ -21,6 +22,9 @@ const ViewProfile = () => {
         phone : null
     })
 
+    dispatch(setAnotherProfile(UserInfo))
+
+
     document.title  = Name  // Change Browser tap as user name
 
     return (
@@ -29,7 +33,7 @@ const ViewProfile = () => {
                 <div className='m-10 mx-20 md:m-20 w-full '>
                     <div className=' w-full items-center flex flex-col'>
                         <div className='w-24 h-24 bg-blue-200 rounded-full'>
-                            <div>
+                            <div className='w-full'>
                                 <ProfileImg profile_url={UserInfo.profile_img} last_name={UserInfo.last_name} />
                             </div>
                         </div>

@@ -14,29 +14,60 @@ import CheckLogin from "../Controllers/CheckLogin";
 import Footer from "../components/footer";
 import SlideLogo from "./slide_logo";
 import LoadingScreen from "../components/Loadind_Screen";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from 'axios';
+import { API } from "../api/api_key";
+import { get_all_car } from "../api/route_api";
+import GetAllCars from "../api/get_categerys/get_cars";
+import GetAllMotors from "../api/get_categerys/get_motors";
+import GetAllComputers from "../api/get_categerys/get_all_computers";
+import GetAllPhones from "../api/get_categerys/get_all_phones";
 
 
-const Home = () => {   
-    const [Login , SetLogin] = useState(null)
-    const [dataGet , setDataget] = useState({
-        car : null,
-        motor : null,
-        laptop : null,
-    })
+const Home = () => {
 
-    const [getCar , setCar] = useState(null)
+    const state = useSelector((state) => state.data.HomeData)
+
+    const [Cars, setCars] = useState(null)
+    const [Motors , setMotors] = useState(null)
+    const [Computers, setComputers] = useState(null)
+    const [SmartPhones , setSmartPhones] = useState(null)
+    useEffect(() => {
+        const getCars = async () => {
+            setCars(await GetAllCars())
+        }
+        const getMotors = async () => {
+            setMotors(await GetAllMotors())
+        }
+        const getComputers = async() => {
+            setComputers(await GetAllComputers())
+        }
+        const getSmartPhones = async() => {
+            setSmartPhones(await GetAllPhones())
+        }
+        getMotors()
+        getCars()
+        getComputers()
+        getSmartPhones()
+    }, [])
+
+
+    if (!Cars || !Motors || !Computers || !SmartPhones) {
+        return <LoadingScreen />
+    }
 
 
     return (
         <>
-                {/* <div className="mt-5"><Advertisement /></div> */}
-                <div className=" top-20 mt-14 sticky"><SearchBar /></div>
-                 <div className="z-[2]"><CarCategory setGet={setCar} /></div>
-                 <div className="z-[2]"><MotorCategory /></div>
-                 <div className="z-[2]"><LaptopCategory /></div>
-                 <div className="z-[2]"><PhoneCategory /></div>   
-                 <div className="z-[2]"><SlideLogo /></div>       
-                 <div className="w-full h-[10vh]"><Footer /></div>    
+            {/* <div className="mt-5"><Advertisement /></div> */}
+            <div className=" top-20 mt-14 sticky"><SearchBar /></div>
+            <div className="z-[2]"><CarCategory data={Cars} /></div>
+            <div className="z-[2]"><MotorCategory data={Motors} /></div>
+            <div className="z-[2]"><LaptopCategory data={Computers}  /></div>
+            <div className="z-[2]"><PhoneCategory data={SmartPhones} /></div>
+            <div className="z-[2]"><SlideLogo /></div>
+            <div className="w-full h-[10vh]"><Footer /></div>
 
 
         </>

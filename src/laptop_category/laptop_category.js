@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Post from "../components/Post_Img.js";
 import { Categories } from "../assets/categories.js";
 
-const MotorCategory = () => {
+const MotorCategory = ({data}) => {
 
     const Nav =  useNavigate();
     const [status, setstatus] = useState(0)
@@ -25,8 +25,7 @@ const MotorCategory = () => {
     const [locationsLink, setlocationsLink] = useState([]);
     const [Id , setId] = useState(null)
     useEffect(() => {
-        const getMotors = async () => {
-            const data = await GetAllComputers(setstatus);
+       
             setprice(data[0])
             setModels(data[1])
             setmakes(data[3])
@@ -37,8 +36,6 @@ const MotorCategory = () => {
             setlocations(data[7])
             setlocationsLink(data[8])
             setId(data[12])
-        }
-        getMotors();
     }, [])
 
 

@@ -4,7 +4,7 @@ import IsEnglish from './language';
 
 
 const Post = ({ Image, Price, Model, Make, Location, Hp, CC, Category, Color ,  Year, Cpu, Ram }) => {
-    let price = 100 // (+(Price +"").split('.')[1]) > 0 ? Price : (Price+"").split(".")[0]
+    let price =   (+(Price +"").split('.')[1]) > 0 ? Price : (Price+"").split(".")[0]
     return (
         <>
             <div className="w-full h-full shadow-md rounded-lg bg-slate-100 hover:shadow-xl hover:cursor-pointer ">

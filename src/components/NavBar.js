@@ -3,8 +3,7 @@ import './style.css';
 import SideMenu from "./menuSideBar";
 import { Link } from "react-router-dom";
 import { home, login, profile, signup } from "../routes/string_routes";
-import CheckHomePage from "../Controllers/CheckLogin";
-import { GetToken } from "../cookie/cookie";
+import { setMyProfile } from "../app/data/data";
 import HandleLogout from "../api/logout";
 import CheckLogin from "../Controllers/CheckLogin";
 import { CarCategories, Categories, LaptopCategories, MotorCategory, PhoneCategory, PropertiesCategories } from "../assets/categories";
@@ -15,19 +14,23 @@ import { useCallback } from "react";
 import { HandleCloseElement, HandleDisplayElement } from "./handle_display_element";
 import kh_flag from "../assets/images/kh_flag.png";
 import en_flag from "../assets/images/en_flag.png";
-import axios from "axios";
+import { setLoginState } from "../app/data/data";
 import { API } from "../api/api_key";
 import ProfileImg from "./profile_img";
+import { useDispatch } from "react-redux";
+import LoadingScreen from "./Loadind_Screen";
 
 
 const NavBar = () => {
-    const [fullname, setfullname] = useState('')
-    const [profile_url, setprofileurl] = useState('')
-    const [first_name, setfirt_name] = useState('')
-    const [last_name, setlast_name] = useState('')
-    const [LoginStatus, setLoginStatus] = useState(null)
 
- 
+    const [LoginStatus, setLoginStatus] = useState(null)
+    const dispatch = useDispatch();
+    const [MyProfile, setProfile] = useState({
+        fullname: null,
+        profile_img: null,
+        last_name: null,
+        first_name: null
+    })
 
     try {
         const language = localStorage.getItem('ln')
@@ -40,12 +43,16 @@ const NavBar = () => {
 
     const GetInfo = async () => {
         const data = await GetUserInformation(setLoginStatus);
-        setfullname(data[0])
-        setprofileurl(data[1])
-        setfirt_name(data[3])
-        setlast_name(data[4])
-    }
+        setProfile({
+            fullname: data[0],
+            profile_img: data[1],
+            first_name: data[3],
+            last_name: data[4],
+        })
 
+         dispatch(setLoginState(LoginStatus)) 
+
+    }
     const GetLogin = async () => {
         const data = await CheckLogin();
         setLoginStatus(data)
@@ -59,20 +66,26 @@ const NavBar = () => {
         getLogin()
     }, [])
 
+    useEffect(() => {
+        if (MyProfile){
+            dispatch(setMyProfile(MyProfile))
+        }
+    } , [MyProfile.last_name])
+
 
 
     const LanaguageSelete = () => {
 
-        const [LanaguageUpdate  , setLanguageUpdate] = useState(false)
+        const [LanaguageUpdate, setLanguageUpdate] = useState(false)
         const language = localStorage.getItem('ln')
 
         const ChangeLanguage = () => {
-        const language = localStorage.getItem('ln')
+            const language = localStorage.getItem('ln')
             localStorage.removeItem('ln')
-            if (language == 'en'){
-                localStorage.setItem('ln' , 'kh')
-            }else{
-                localStorage.setItem('ln' , 'en')
+            if (language == 'en') {
+                localStorage.setItem('ln', 'kh')
+            } else {
+                localStorage.setItem('ln', 'en')
             }
             setLanguageUpdate(!LanaguageUpdate)
             window.location.href = window.location.href
@@ -96,6 +109,7 @@ const NavBar = () => {
             </>
         )
     }
+
 
     return (
         <>
@@ -129,16 +143,13 @@ const NavBar = () => {
                     </div>
                     {LoginStatus ? <div className="flex items-center">
                         <i class="fa-regular fa-message text-2xl text-white">
-                            {/* <div className="absolute mt-4 ml-[-120px] w-[280px] h-[390px]">
-                            <Message />
-                            </div> */}
                         </i>
                         <i class="fa-regular fa-bell ml-5 text-2xl text-white"></i>
                         <div className="">
                             <div onClick={() => handleProfileMenu()} className="w-10 h-10 ml-5 relative rounded-full bg-stone-400  hover:cursor-pointer"  >
 
                                 <div className="absolute inset-0">
-                                    <ProfileImg last_name={last_name} profile_url={profile_url} />
+                                    <ProfileImg last_name={MyProfile.last_name} profile_url={MyProfile.profile_img} />
                                 </div>
                             </div>
                             <div onMouseOut={() => setTimeout(() => HandleCloseElement('profileMenu'), 4000)} onMouseOver={() => HandleDisplayElement('profileMenu')} id="profileMenu" className="hidden bg-white justify-around absolute flex-col ml-[-5%] h-[250%] text-center w-32 rounded-md shadow-sm shadow-blue-700 text-slate-600">

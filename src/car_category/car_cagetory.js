@@ -11,14 +11,17 @@ import LoadingScreen from "../components/Loadind_Screen.js";
 import LoadingSpinner from "../components/loading_spinner.js";
 import { Categories } from "../assets/categories.js";
 import Post from "../components/Post_Img.js";
+import { setHomeData } from "../app/data/data.js";
+import { useDispatch } from "react-redux";
 
 
 
 
-const CarCategory = ({setGet}) => {
+const CarCategory = ({data = []}) => {
     const Eng = IsEnglish
 
     const Nav = useNavigate();
+    const dispatch = useDispatch();
     const [status, setstatus] = useState(0)
     const [prices, setprice] = useState([])
     const [images, setImage] = useState([]);
@@ -32,7 +35,6 @@ const CarCategory = ({setGet}) => {
     const [locationsLink , setlocationsLink] = useState([]);
     useEffect(() => {
         const getCars = async () => {
-            const data = await GetAllCars(setstatus);
             setprice(data[0])
             setModels(data[1])
             setmakes(data[2])
@@ -43,7 +45,7 @@ const CarCategory = ({setGet}) => {
             setlocations(data[7])
             setlocationsLink(data[8])
             setId(data[9])
-            setGet('')
+            dispatch(setHomeData())
         }
         getCars();
     }, [])
