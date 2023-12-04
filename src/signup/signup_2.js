@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { gotoSignupPage1, home, login } from "../routes/string_routes";
-import Signup from "../api/user_managements/user_signup";
 import LoadingSpinner from "../components/loading_spinner";
-import axios from "axios";
-import { API } from "../api/api_key";
 import { signup } from "../api/route_api";
-import { SetUUID, setToken } from "../cookie/cookie";
+import { useDispatch } from "react-redux";
+import { setToken, setUuid } from "../app/data/data";
+import AxiosInstance from "../api/axios";
+
 
 const SecondPage = ({ setPage, first_name, last_name }) => {
     const Nav = useNavigate()
@@ -15,6 +15,7 @@ const SecondPage = ({ setPage, first_name, last_name }) => {
     const [ConfirmPassword, setConfirmPassword] = useState('')
     const [InputError, setInputError] = useState('')
     const [Loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
 
     document.addEventListener('keypress', async (e) => {
         if (e.key === "Enter") {
@@ -30,19 +31,18 @@ const SecondPage = ({ setPage, first_name, last_name }) => {
     }
 
     const CheckPasswordMatch = () => !Password === ConfirmPassword
-    
+
 
     const HandleSignup = async () => {
         if (CheckPasswordMatch()) {
             setInputError("Password not match !")
         } else {
             setInputError('')
-            console.log(Data)
-            await axios.post(API + signup, Data).then((response) => {
+
+            await AxiosInstance.post(signup , Data).then((response) => {
                 if (response.status === 200) {
-                    setToken(response.data.Message.jwt)
-                    SetUUID(response.data.Message.uuid)
-                    window.location.href = home
+                    Nav(home)
+                    console.log(response.data)
                 }
             }).catch((e) => {
                 console.log(e)
@@ -51,22 +51,22 @@ const SecondPage = ({ setPage, first_name, last_name }) => {
     }
     return (
         <>
-            <div class="bg-white w-full h-full flex items-center justify-center">
-                <div class="w-full h-full">
-                    <h1 class="text-xl md:text-2xl font-bold leading-tight">Create your account</h1>
+            <div classNames="bg-white w-full h-full flex items-center justify-center">
+                <div className="w-full h-full">
+                    <h1 className="text-xl md:text-2xl font-bold leading-tight">Create your account</h1>
                     <div>
-                        <label class="block text-gray-700 pt-10">Email or Phone Number</label>
+                        <label className="block text-gray-700 pt-10">Email or Phone Number</label>
                         <input value={EmailPhoneNumber} onChange={(e) => setEmailPhoneNumber(e.target.value)} type="email" name="" placeholder="Email or Phone Number" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required></input>
                     </div>
 
-                    <div class="mt-4">
-                        <label class="block text-gray-700 pt-5" >Password</label>
+                    <div className="mt-4">
+                        <label className="block text-gray-700 pt-5" >Password</label>
                         <input value={Password} onChange={(e) => setPassword(e.target.value)} type="password" name="" id="Pass" placeholder="Password" minlength="6" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
                 focus:bg-white focus:outline-none" required></input>
                     </div>
-                    <div class="mt-4">
+                    <div className="mt-4">
                         {InputError !== '' && <p className="text-red-700 italic ml-5">{InputError}</p>}
-                        <label class="block text-gray-700 pt-5">Confirm Password</label>
+                        <label className="block text-gray-700 pt-5">Confirm Password</label>
                         <input value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type="password" name="" id="ConfirmPass" placeholder="Confirm Password" minlength="6" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
                 focus:bg-whit e focus:outline-none" required></input>
                     </div>

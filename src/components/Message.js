@@ -64,7 +64,7 @@ const Message = () => {
             <>
                 <div className="w-full relative overflow-auto h-full bg-slate-400">
                     <div className="flex items-center sticky bg-black top-0">
-                        <i class="ml-5 mt-2 fa-solid fa-arrow-left"></i>
+                        <i className="ml-5 mt-2 fa-solid fa-arrow-left"></i>
                         <div className="ml-5 mt-2 w-[13%] pb-[13%] rounded-full bg-blue-700">
 
                         </div>
@@ -81,7 +81,7 @@ const Message = () => {
                         <div className="w-full items-center h-full flex">
                             <input placeholder=" Message" className="h-[60%] rounded-md bg-slate-300 text-xs outline-none w-[80%] ml-3"></input>
                             <div className="w-[20%] flex justify-center">
-                            <i class="fa-regular fa-paper-plane"></i>
+                            <i className="fa-regular fa-paper-plane"></i>
                             </div>
                         </div>
                     </div>

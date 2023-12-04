@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { API } from '../api_key';
+import API from '../api_key'
+
 import { emailLogin } from '../route_api';
 import { SetUUID, setToken } from '../../cookie/cookie';
 import { home } from '../../routes/string_routes';

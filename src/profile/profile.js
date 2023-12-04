@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DisplayAllPost from "./posts/posts";
-import DisplayAllLiked from "./liked/liked";
-import {AddNewProfile} from './edit_profile'
-import DisplayAllShares from "./follows/followers";
-import CheckLogin from "../Controllers/CheckLogin";
-import { Link } from "react-router-dom";
-import GetUserInformation from "../api/user_managements/get_user_info";
-import Posts from "./posts/User_Posted";
+import { AddNewProfile } from './edit_profile'
+import { Link, useNavigate } from "react-router-dom";
 import ProfileImg from "../components/profile_img";
 import LoadingSpinner from "../components/loading_spinner";
-import { GetUUID } from "../cookie/cookie";
 import AxiosInsta from "../api/axios";
-import { profile_upload } from "../api/route_api";
-import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingScreen from "../components/Loadind_Screen";
 import EditProfile from "./edit_profile";
+import { addPost, home } from "../routes/string_routes";
 
 const Profile = () => {
 
@@ -25,9 +18,13 @@ const Profile = () => {
         uuid: null,
         ImageLength: null
     })
+    const Nav = useNavigate()
+    const dispatch = useDispatch()
 
     const profileData = useSelector((state) => state.data.MyProfile)
-
+    const LoginState = useSelector(state => state.data.LoginState)
+    const Token = useSelector(state => state.data.Token)
+    const StateChange = useSelector(state => state.data.StateChange)
     const [profile, setProfile] = useState(null)
     useEffect(() => {
         if (profileData) {
@@ -37,105 +34,70 @@ const Profile = () => {
             }
             setProfile(data)
         }
-    } , [profileData])
-    let Phone = "089261500"
-    let Location = "Phnom Penh"
-    let Email = "phonkakada@icloud.com"
+    }, [profileData, StateChange])
 
     const AllButtons = ['Add Post', 'Posts', 'Likes', 'Shares', 'Followers', 'Followings']
     const [CurrentButton, setCurrentButton] = useState(AllButtons[1])
 
-    const HandleChangeButton = (Button) => {
-        setCurrentButton(Button)
-    }
 
-    const UpdateProfile = () => {
-        const data = new FormData();
-
-
-        const handleFileChange = async (event) => {
-            // File has been selected, you can perform further actions here if needed
-            // console.log('File selected:', event.target.files[0]);
-
-
-
-            const img = document.getElementById('pick_profile')
-            if (img) {
-
-                data.append('images', 11)
-                await AxiosInsta.post(profile_upload, data).then(response => {
-                    if (response.status === 200) {
-                        setfileBeginUpload(false)
-                        console.log(response.data)
-                    }
-                }).catch(e => {
-                    setfileBeginUpload(false)
-                    console.log(e)
-                })
-
-            }
-
-
-        };
-
-        return (
-            <div>
-                <input onChange={handleFileChange} id="pick_profile" className="hidden" type="file" accept="image/*"></input>
-            </div>
-        )
+    if (!LoginState) {
+        Nav(home)
     }
 
     if (!profile) {
-        return <div>{JSON.stringify(profile)}</div>
+        return <LoadingScreen />
     }
 
+    const UserContacts = profileData.contacts[0]
 
-
-    document.title = profile.fullname
+    document.title = profile.name
     return (
         <>
-            <div id="profile" className="w-[100vw]  overflow-hidden flex justify-center h-[100vh]">
+            <div id="profile" className="w-[100vw]  flex justify-center h-[100vh]">
                 <div className="w-[60%]">
                     <center>
-                        <div onClick={UpdateProfile} title="Change Profile" className=" w-20 pb-20 mt-10 md:w-24 bg-stone-400 md:pb-24 relative rounded-full overflow-hidden">
+                        <div title="Change Profile" className=" w-20 pb-20 mt-10 md:w-24 bg-stone-400 md:pb-24 relative rounded-full overflow-hidden">
                             <div className="absolute w-full h-full inset-0">
-                                <ProfileImg last_name={profile.last_name} profile_url={profile.profile_img} />
+                                <ProfileImg last_name={profile.last_name} profile_url={profile.profile_url} />
                             </div>
 
                         </div>
                         <div>
-                            <AddNewProfile />
+                            <AddNewProfile dispatch={dispatch} uuid={profile.uuid} token={Token} />
                         </div>
 
-                        <UpdateProfile />
-                        <p className="mt-5 text-2xl flex w-full justify-center font-semibold"><p>{profile.fullname}</p>{fileBeginUpload === true && <div className="ml-5"><LoadingSpinner /></div>}</p>
-                       
+                        <p className="mt-5 text-2xl flex w-full justify-center font-bold font-Playpen"><p>{profile.name}</p></p>
+
                     </center>
-                    <div className="m-auto w-full  mt-10 text-center">
-                        <ul className=" items-center text-slate-500 ml-20">
-                            <Link to={`tel: +855 ${Phone}`}><li className="flex items-center">
-                                <i class="fa-solid fa-phone mr-5"></i>
-                                <p>{Phone}</p>
-                            </li></Link>
-                            <li className="flex items-center mt-5">
+                    <div className=" w-full  mt-10">
+                        <ul className="text-slate-500">
+                            {UserContacts.phone != null &&
+                                <Link to={`tel: +855 ${UserContacts.phone}`}><li className="flex items-center">
+                                    <i class="fa-solid fa-phone mr-5"></i>
+                                    <p>{UserContacts.phone}</p>
+                                </li></Link>
+                            }
+                            {/* <li className="flex items-center mt-5">
                                 <i class="fa-solid fa-location-dot mr-5"></i>
                                 <p>{Location}</p>
-                            </li>
-                            <li className="flex items-center mt-5">
-                                <i class="fa-regular fa-envelope mr-5"></i>
-                                <p>{Email}</p>
-                            </li>
+                            </li> */}
+                            {
+                                UserContacts.email != null &&
+                                <Link to={`mailto: ${UserContacts.email}`}>
+                                    <li className="flex items-center mt-5">
+                                        <i class="fa-regular fa-envelope mr-5"></i>
+                                        <p>{UserContacts.email}</p>
+                                    </li>
+                                </Link>
+                            }
                             <li className="flex hover:text-blue-500 hover:italic hover:cursor-pointer items-center mt-5">
                                 <i class="fa-solid fa-triangle-exclamation mr-5"></i>
                                 <p className="" onClick={HandleShowProfileEdit}>Edit Profile</p>
                             </li>
+
                         </ul>
                     </div>
                     <hr className="mt-5"></hr>
-                    <center className="hidden mt-20 md:block">
-                        <button className="bg-slate-300 p-5 rounded-lg mr-5" onClick={() => HandleChangeButton(AllButtons[0])}>{AllButtons[0]}</button>
-
-                    </center>
 
                     {/* <hr className=" mt-5 md:hidden"></hr>
                     <ul className="w-full z-[1] sticky top-14 flex mt-2 justify-between  md:hidden">
@@ -145,15 +107,17 @@ const Profile = () => {
                         <li className="w-1/2 bg-blue-200 hover:cursor-pointer hover:text-slate-100 text-center" onClick={() => HandleChangeButton(AllButtons[5])}><i class="fa-solid fa-heart text-slate-400"> </i></li>
                     </ul>
                     <hr className="mt-2 md:mt-10"></hr> */}
-                    {CurrentButton === AllButtons[1] && <div><DisplayAllPost profile={ProfileImg} Name={profile.fullname} /></div>}
+                    {CurrentButton === AllButtons[1] && <div className="pb-20"><DisplayAllPost profile={ProfileImg}  Name={profile.fullname} /></div>}
                     {/* <Posts />
                     {CurrentButton === AllButtons[2] && <DisplayAllLiked />}
                     {CurrentButton === AllButtons[3] && <DisplayAllShares />}
                     {CurrentButton === AllButtons[5] && <DisplayAllFollowings />} */}
                 </div>
             </div>
-            <div id="edit-profile" className="top-[20%] hidden shadow-sm shadow-slate-500 ml-20 w-[80%] h-[80%] md:w-[60%]   bottom-1/2 absolute">
-                <EditProfile func={HandleShowProfileEdit} />
+            <div id="edit-profile" className="top-[15%] justify-center hidden flex w-full h-[80%] absolute">
+                <div className="w-[80%] max-w-lg">
+                    <EditProfile func={HandleShowProfileEdit} />
+                </div>
             </div>
         </>
     )
@@ -162,12 +126,10 @@ const Profile = () => {
 const HandleShowProfileEdit = () => {
     const Profile = document.getElementById('profile')
     const EditProfile = document.getElementById('edit-profile')
-    if (Profile && EditProfile){
-        if (EditProfile.classList.contains('hidden')){
+    if (Profile && EditProfile) {
+        if (EditProfile.classList.contains('hidden')) {
             EditProfile.classList.remove('hidden')
-            Profile.classList.add('overflow-hidden')
-            Profile.classList.add('blue-sm')
-        }else{
+        } else {
             EditProfile.classList.add('hidden')
         }
     }

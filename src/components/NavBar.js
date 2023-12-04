@@ -3,34 +3,23 @@ import './style.css';
 import SideMenu from "./menuSideBar";
 import { Link } from "react-router-dom";
 import { home, login, profile, signup } from "../routes/string_routes";
-import { setMyProfile } from "../app/data/data";
-import HandleLogout from "../api/logout";
-import CheckLogin from "../Controllers/CheckLogin";
+import { setMyProfile, setToken, setUuid } from "../app/data/data";
+import axios from 'axios'
 import { CarCategories, Categories, LaptopCategories, MotorCategory, PhoneCategory, PropertiesCategories } from "../assets/categories";
-import Message from "./Message";
-import LoginState from "../state_management/login_state";
-import GetUserInformation from "../api/user_managements/get_user_info";
-import { useCallback } from "react";
 import { HandleCloseElement, HandleDisplayElement } from "./handle_display_element";
 import kh_flag from "../assets/images/kh_flag.png";
 import en_flag from "../assets/images/en_flag.png";
 import { setLoginState } from "../app/data/data";
-import { API } from "../api/api_key";
 import ProfileImg from "./profile_img";
-import { useDispatch } from "react-redux";
-import LoadingScreen from "./Loadind_Screen";
+import { useDispatch, useSelector } from "react-redux";
+import { get_user_info, logout } from "../api/route_api";
+import AxiosInstance from "../api/axios";
+import API from "../api/api_key";
 
 
 const NavBar = () => {
 
-    const [LoginStatus, setLoginStatus] = useState(null)
     const dispatch = useDispatch();
-    const [MyProfile, setProfile] = useState({
-        fullname: null,
-        profile_img: null,
-        last_name: null,
-        first_name: null
-    })
 
     try {
         const language = localStorage.getItem('ln')
@@ -41,37 +30,26 @@ const NavBar = () => {
         console.log("e")
     }
 
-    const GetInfo = async () => {
-        const data = await GetUserInformation(setLoginStatus);
-        setProfile({
-            fullname: data[0],
-            profile_img: data[1],
-            first_name: data[3],
-            last_name: data[4],
-        })
-
-         dispatch(setLoginState(LoginStatus)) 
-
-    }
-    const GetLogin = async () => {
-        const data = await CheckLogin();
-        setLoginStatus(data)
-    }
-
-    const getInfo = useCallback(GetInfo, []);
-    const getLogin = useCallback(GetLogin, []);
+    const token = useSelector(state => state.data.Token)
+    const StateChange = useSelector(state => state.data.StateChange)
 
     useEffect(() => {
-        getInfo()
-        getLogin()
-    }, [])
+        const GetUserInfo = async () => {
+            
+                await AxiosInstance.get(get_user_info).then((e) => {
+                    if (e.status === 200) {
+                        dispatch(setMyProfile(e.data.Message))
+                        dispatch(setLoginState(true))
+                        // console.log(e.data)
+                    }
+                }).catch(e => { 
+                    // console.log(e)
 
-    useEffect(() => {
-        if (MyProfile){
-            dispatch(setMyProfile(MyProfile))
+                })
+            
         }
-    } , [MyProfile.last_name])
-
+        GetUserInfo()
+    }, [token , StateChange])
 
 
     const LanaguageSelete = () => {
@@ -111,10 +89,25 @@ const NavBar = () => {
     }
 
 
+    const MyProfile = useSelector(state => state.data.MyProfile)
+    const LoginStatus = useSelector(state => state.data.LoginState)
+
+    
+
+    const Logout  = async() => {
+        await AxiosInstance.delete(logout).then(res => {
+            if (res.status === 200){
+                dispatch(setLoginState(false))
+                dispatch(setMyProfile(null))
+            }
+        }).catch(e => {
+            console.log(e)
+        })
+    }
     return (
         <>
             <div className="w-full flex h-16 bg-blue-400 items-center">
-                <div className="h-full hidden " onMouseOver={(e) => HandleMouseOver()} onMouseOut={(e) => HandleMouseOut()} id="ListMenu">
+                <div className="h-full w-full hidden" onMouseOver={(e) => HandleMouseOver()} onMouseOut={(e) => HandleMouseOut()} id="ListMenu">
                     <SideMenu></SideMenu>
                 </div>
                 <div className="flex justify-between mr-10 h-full w-full items-center" >
@@ -141,21 +134,21 @@ const NavBar = () => {
                             </li>
                         </ul>
                     </div>
-                    {LoginStatus ? <div className="flex items-center">
-                        <i class="fa-regular fa-message text-2xl text-white">
+                    {MyProfile ? <div className="flex items-center">
+                        <i className="fa-regular fa-message text-2xl text-white">
                         </i>
-                        <i class="fa-regular fa-bell ml-5 text-2xl text-white"></i>
+                        <i className="fa-regular fa-bell ml-5 text-2xl text-white"></i>
                         <div className="">
                             <div onClick={() => handleProfileMenu()} className="w-10 h-10 ml-5 relative rounded-full bg-stone-400  hover:cursor-pointer"  >
 
                                 <div className="absolute inset-0">
-                                    <ProfileImg last_name={MyProfile.last_name} profile_url={MyProfile.profile_img} />
+                                    <ProfileImg last_name={MyProfile.last_name} profile_url={MyProfile.profile_url} />
                                 </div>
                             </div>
                             <div onMouseOut={() => setTimeout(() => HandleCloseElement('profileMenu'), 4000)} onMouseOver={() => HandleDisplayElement('profileMenu')} id="profileMenu" className="hidden bg-white justify-around absolute flex-col ml-[-5%] h-[250%] text-center w-32 rounded-md shadow-sm shadow-blue-700 text-slate-600">
                                 <Link className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center" to={profile}><div className="flex items-center"><i class="fa-solid fa-user ml-5"></i><p className="ml-2">Profile</p></div></Link>
                                 <Link className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-gear ml-5"></i><p className="ml-2">Setting</p></div></Link>
-                                <Link onClick={() => HandleLogout()} className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-right-from-bracket ml-5"></i><p className="ml-2">Logout</p></div></Link>
+                                <Link onClick={Logout} className="hover:bg-slate-500 w-full h-[30%] decoration-blue-500 hover:text-white flex items-center"><div className="flex items-center"><i class="fa-solid fa-right-from-bracket ml-5"></i><p className="ml-2">Logout</p></div></Link>
                             </div>
                         </div>
 
@@ -176,20 +169,20 @@ const CategoriesMenu = () => {
             <div className=" bg-blue-300 w-full h-full overflow-auto overflow-x-hidden no-scrollbar text-start">
                 <p onClick={() => HandleDisplayCategories('Properties')} className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Properties</p>
-                    <i class="fa-solid fa-angle-down"></i></p>
+                    <i className="fa-solid fa-angle-down"></i></p>
                 <p id="Properties" className="hidden w-full ml-7 mr-5">
                     <ProductMenu Product={PropertiesCategories} />
                 </p>
                 <p onClick={() => HandleDisplayCategories('Car')} className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Car</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i className="fa-solid fa-angle-down"></i>
                 </p>
                 <p id="Car" className="hidden w-full ml-7 mr-5">
                     <ProductMenu Product={CarCategories} />
                 </p>
                 <p onClick={() => HandleDisplayCategories('Motor')} className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Motor</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i className="fa-solid fa-angle-down"></i>
                 </p>
                 <p id="Motor" className="hidden w-full ml-7 mr-5">
                     <ProductMenu Product={MotorCategory} />
@@ -203,18 +196,18 @@ const CategoriesMenu = () => {
                 </p>
                 <p onClick={() => HandleDisplayCategories('SmartPhone')} className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Smart Phone</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i className="fa-solid fa-angle-down"></i>
                 </p>
                 <p id="SmartPhone" className="hidden w-full ml-7 mr-5">
                     <ProductMenu Product={PhoneCategory} />
                 </p>
                 <p onClick={() => HandleDisplayCategories('Bike')} className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Bike</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i className="fa-solid fa-angle-down"></i>
                 </p>
                 <p id="" className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Smart Phone</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i className="fa-solid fa-angle-down"></i>
                 </p>
             </div>
         </>
@@ -360,24 +353,5 @@ const HandleNavbar = () => {
         }
     }
 }
-
-// const HandleCloseElement = (id) => {
-//     const Ele = document.getElementById(id)
-//     if (Ele){
-//         if (!Ele.classList.contains('hidden')){
-//             Ele.classList.add('hidden')
-//         }
-//     }
-// }
-
-// const HandleDisplayElement = (id) => {
-//     const Ele = document.getElementById(id)
-//     if (Ele){
-//         if (Ele.classList.contains('hidden')){
-//             Ele.classList.remove('hidden')
-//             Ele.classList.add('block')
-//         }
-//     }
-// }
 
 export default NavBar

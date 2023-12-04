@@ -1,12 +1,16 @@
 import axios from 'axios';
-const { API } = require("./api_key");
-const { GetToken } = require("../cookie/cookie");
+import API from './api_key';
 
-const AxiosInsta = axios.create(
+
+
+
+
+const AxiosInstance = axios.create(
     {
-        baseURL: API,
-        headers: {'Authorization' : 'Bearer ' + GetToken()}
+        baseURL : API,
+        withCredentials: true,
     }
-)
 
-export default AxiosInsta
+    
+)
+export default AxiosInstance

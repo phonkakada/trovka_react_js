@@ -1,31 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Post from '../components/SignlePost';
 import ProfileImg from '../components/profile_img';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAnotherProfile } from '../app/data/data';
+import AxiosInsta from '../api/axios';
+import LoadingScreen from '../components/Loadind_Screen';
+import AxiosInstance from '../api/axios';
+import { get_user_post_info } from '../routes/string_routes';
 const ViewProfile = () => {
     const id = useParams();
     const uuid = id.uuid;
 
-    const [Name, setName] = useState('PHON KAKADA')
-    const [Regster, setRegister] = useState('2023-11-14')
     const [Email, setEmail] = useState('phonkakada@icloud.com')
     const [Phone, setPhone] = useState('089261500')
     const dispatch = useDispatch();
-    const [UserInfo , setUserInfo] = useState({
-        profile_img : 'https://storage.googleapis.com/trovka_image/photo_2023-09-16_11-40-21.jpg',
-        last_name : null,
-        first_name : null,
-        register_date : null,
-        email : null,
-        phone : null
-    })
 
-    dispatch(setAnotherProfile(UserInfo))
+    // dispatch(setAnotherProfile(UserInfo))
+
+    const User = useSelector(state => state.data.AnotherProfile)
+    if (!User){
+        const GetUserInfomation = async () => {   // If User check profile directly data will be null so we need to request data to server to get data
+            await AxiosInstance.get(get_user_post_info + uuid).then((e) => {
+                if (e.status === 200){
+                    // console.log(e.data.Message)
+                    dispatch(setAnotherProfile(e.data.Message))
+                }
+            }).catch(e => {
+                // console.log(e)
+            })
+        }
+        if (uuid){
+            GetUserInfomation()
+        }
+        return <LoadingScreen /> 
+    }
 
 
-    document.title  = Name  // Change Browser tap as user name
+    document.title  = User.first_name + " " + User.last_name  // Change Browser tap as user name
 
     return (
         <>
@@ -33,13 +45,13 @@ const ViewProfile = () => {
                 <div className='m-10 mx-20 md:m-20 w-full '>
                     <div className=' w-full items-center flex flex-col'>
                         <div className='w-24 h-24 bg-blue-200 rounded-full'>
-                            <div className='w-full'>
-                                <ProfileImg profile_url={UserInfo.profile_img} last_name={UserInfo.last_name} />
+                            <div className='w-full h-full rounded-full'>
+                                <ProfileImg profile_url={User.profile_url} last_name={User.last_name} />
                             </div>
                         </div>
                         <div className='mt-5 font-bold font-Playpen text-slate-600 text-xl'>
-                            <p>{Name}</p>
-                            <p className='text-sm font-sans font-thin italic'>Member since {Regster}</p>
+                            <p>{User.first_name + " " + User.last_name}</p>
+                            <p className='text-sm font-sans font-thin italic'>Member since: {User.created_at.split('T')[0]}</p>
                         </div>
 
                     </div>
@@ -65,11 +77,26 @@ const ViewProfile = () => {
 }
 
 const AllPosts = () => {
+    let arr = []
+
+    for (let i = 0 ; i < 1 ; i++){
+        arr.push(<Post category={'Car'} Owner={false} />)
+    }
+
+    const end_screen = document.getElementById('end-screen')
+    window.addEventListener('scroll', () => {
+        if(end_screen){
+            const pos = end_screen.getBoundingClientRect()
+            console.log(pos.top)
+        }
+    })
+
     return (
         <>
             <div>
                 <p className='text'>Post</p>
-                <Post category={'Car'} Owner={false} />
+                {arr}
+                <div id='end-screen'>HEllo</div>
             </div>
         </>
     )

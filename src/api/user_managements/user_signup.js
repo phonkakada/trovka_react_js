@@ -1,6 +1,7 @@
 import axios from "axios";
 import { signupwithEmail, signupwithPhone_number } from "../route_api";
-import { API } from "../api_key";
+import API from '../api_key'
+
 import {SetUUID , setToken} from '../../cookie/cookie'
 import { home } from "../../routes/string_routes";
 

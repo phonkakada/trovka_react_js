@@ -1,7 +1,5 @@
-import axios from "axios"
-import { API } from "../api_key"
 import { get_all_car, post_car } from "../route_api"
-import { useState } from "react"
+import AxiosInstance from "../axios"
 
 
 
@@ -19,7 +17,7 @@ const GetAllCars = async (setstatus) => {
 
     let imgs = [];
 
-    await axios.get(API + get_all_car).then((response) => {
+    await AxiosInstance.get(get_all_car).then((response) => {
         for (let i = 0; i < response.data.length; i++) {
             let price = response.data[i].Post.price
             let model = response.data[i].Post.getinfo[0].model
@@ -46,10 +44,9 @@ const GetAllCars = async (setstatus) => {
             locationsLink.push(locationLink)
             Ids.push(Id)
         }
-        setstatus(200);
 
     }).catch((e) => {
-
+        // console.log(e)
     })
     return [prices, models ,
             makes , images ,

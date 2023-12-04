@@ -1,12 +1,13 @@
 import React from 'react';
 import AxiosInsta from '../api/axios';
-import { get_product_by_make } from '../api/route_api';
+import { get_product_by_make, get_product_relative } from '../api/route_api';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { view_post } from '../routes/string_routes';
 import Post from './Post_Img';
 import { useRef } from 'react';
+import AxiosInstance from '../api/axios';
 
 const ProductsByMake = ({ make , id }) => {
 
@@ -31,7 +32,7 @@ const ProductsByMake = ({ make , id }) => {
         setMakes([])
         setModels([])
         setPrices([])
-        await AxiosInsta.get(get_product_by_make + '/' + make).then(response => {
+        await AxiosInstance.get(get_product_relative + '/' + make).then(response => {
             if (response.status === 200) {
                 const data = response.data.Message
                 data.forEach(data => {
@@ -49,6 +50,7 @@ const ProductsByMake = ({ make , id }) => {
                         }
                     })
                 });
+                console.log(data)
             }
         }).catch(e => {
 
@@ -59,10 +61,6 @@ const ProductsByMake = ({ make , id }) => {
         GetProducts();
     } , [id])
 
-    const ChangePost = (id) => {
-            
-    }
-
     if (!Ids){
 
     }else{
@@ -71,7 +69,7 @@ const ProductsByMake = ({ make , id }) => {
             <ul className='flex w-full overflow-auto no-scrollbar'>
 
                 {Ids.map((item , index) => (
-                    <li    className="h-[300px] w-[300px] ml-5" onClick={() => Nav("/" + view_post + Ids[index] , 0)} key={index}><Post Category={categories[index].toUpperCase()} Image={Imgs[index]} Price={prices[index]} Model={models[index]} Make={makes[index]} Location={locations[index]} Ram={rams[index]} Year={years[index]} /></li>
+                    <li  className="h-[300px] w-[300px] ml-5" onClick={() => Nav("/" + view_post + Ids[index] , 0)} key={index}><Post Category={categories[index].toUpperCase()} Image={Imgs[index]} Price={prices[index]} Model={models[index]} Make={makes[index]} Location={locations[index]} Ram={rams[index]} Year={years[index]} /></li>
                 ))}
             </ul>
             

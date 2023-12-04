@@ -7,7 +7,6 @@ const DropdownMenu = ({ arrayData, setValue, defaultValue, Type }) => {
     ))
     const [Display, setDisplay] = useState(false)
     const HandleClick = () => {
-        let ArrowKey = document.getElementById('arrow')
         if (Display) {
             setDisplay(false)
         } else {
@@ -19,14 +18,14 @@ const DropdownMenu = ({ arrayData, setValue, defaultValue, Type }) => {
             <div className="w-full">
                 <div className="flex h-10 items-center ml-5 mr-5 justify-between w-full">
                     <div className="items-center flex w-[80%] ">
-                        {Type === "Location" && <i class="fa-solid fa-location-dot ml-4 mr-5 text-blue-500"></i>}
-                        {Type === "Price" && <i class="fa-solid fa-money-bill-wave ml-4 mr-5 text-blue-500"></i>}
-                        {Type === "Category" && <i class="fa-solid fa-house ml-4 mr-5 text-blue-500"></i>}
-                        {Type === "Condition" && <i class="fa-solid fa-box ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Location" && <i className="fa-solid fa-location-dot ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Price" && <i className="fa-solid fa-money-bill-wave ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Category" && <i className="fa-solid fa-house ml-4 mr-5 text-blue-500"></i>}
+                        {Type === "Condition" && <i className="fa-solid fa-box ml-4 mr-5 text-blue-500"></i>}
                         <p className="text-slate-500 overflow-hidden text-ellipsis whitespace-nowrap">{defaultValue}</p>
                     </div>
                     <div className="mr-10">
-                        {!Display ? <i class="fa-solid fa-caret-down text-blue-500 w-[20%] "></i> : <i class="fa-solid  fa-caret-up text-blue-500 w-[40%]"></i>}
+                        {!Display ? <i className="fa-solid fa-caret-down text-blue-500 w-[20%] "></i> : <i class="fa-solid  fa-caret-up text-blue-500 w-[40%]"></i>}
                     </div>
                 </div>
             </div>

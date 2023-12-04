@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import Logo from '../images/Car.jpeg'
-import NumberToK from "../assets/NumberToK.js";
-import Advertisement from "../advertisement/advertisement";
 import { useEffect } from "react";
-import GetAllCars from "../api/get_categerys/get_cars";
 import { view_post } from "../routes/string_routes";
 import IsEnglish from "../components/language";
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from "../components/Loadind_Screen.js";
-import LoadingSpinner from "../components/loading_spinner.js";
 import { Categories } from "../assets/categories.js";
 import Post from "../components/Post_Img.js";
 import { setHomeData } from "../app/data/data.js";

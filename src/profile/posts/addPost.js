@@ -4,11 +4,8 @@ import { useState } from "react";
 import DropdownMenu from "../../components/downDownMenu";
 import { CarCategories, Categories, chairs, fuels, generateArrayOfYears, tax_types, used, warrantys } from "../../assets/categories";
 import "../../index.css";
-import { GetUUID } from "../../cookie/cookie";
 import PostCar from "./addProducts/addCar";
 import LoadingSpinner from "../../components/loading_spinner";
-import axios from "axios";
-import { API } from "../../api/api_key";
 import { post_car, post_computer, post_motor, post_phone } from "../../api/route_api";
 import LocationPicker from "../../location/location_class"
 import DisplayPhonePost from "./components/display_phone";
@@ -17,8 +14,10 @@ import { ProvincesEnglishLanguage } from "../../assets/all_provinces";
 import PostMotor from "./addProducts/addMotor";
 import PostComputer from "./addProducts/addComputer";
 import PostPhone from "./addProducts/addPhone";
-import Axios from "../../api/axios";
-import AxiosInsta from "../../api/axios";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { home } from "../../routes/string_routes";
+import AxiosInstance from "../../api/axios";
 
 const AddPost = () => {
     let Products = []
@@ -33,15 +32,18 @@ const AddPost = () => {
     const [Location, SetLocation] = useState('')
     const [province, setProvince] = useState(ProvincesEnglishLanguage[0])
     const [description, setdescription] = useState('')
-
+    const Token = useSelector(state => state.data.Token)
+    const LoginState = useSelector(state => state.data.LoginState)
     const fromData = new FormData();
+    const Nav = useNavigate()
 
 
-
+    if (!LoginState){
+        Nav(home)
+    }
 
     const handleAddPost = async () => {
         setUploading(true)
-        fromData.append('uuid', GetUUID());
         fromData.append("ImageLength", Images.length)
         fromData.append("locationLink", LocationLink)
         fromData.append("location", Location)
@@ -51,9 +53,8 @@ const AddPost = () => {
         Images.map((item, index) => (
             fromData.append(`images${index}`, item)
         ))
-
         if (defaultValue === Categories[2]) {  // for car
-            await Axios.post(post_car, fromData).then((response) => {
+            await AxiosInstance.post(post_car, fromData , {headers : {'Authorization' : Token}}).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
@@ -64,32 +65,32 @@ const AddPost = () => {
             })
         }
         if (defaultValue === Categories[3]) { // for Motor
-            await AxiosInsta.post(post_motor, fromData).then((response) => {
+            await AxiosInstance.post(post_motor, fromData).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
                 }
             }).catch((e) => {
-               
+            //    console.log(e)
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })
         }
         if (defaultValue === Categories[4]) {  // for Computer
-            await Axios.post(post_computer, fromData).then((response) => {
+            await AxiosInstance.post(post_computer, fromData).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
                 }
             }).catch((e) => {
-
+                console.log(e)
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })
         }
 
         if (defaultValue === Categories[5]) {
-            await axios.post(API + post_phone, fromData).then((response) => {
+            await AxiosInstance.post(post_phone, fromData).then((response) => {
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")

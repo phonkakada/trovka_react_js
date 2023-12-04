@@ -4,12 +4,16 @@ import SimpleImageSlider from "react-simple-image-slider";
 import { GoogleMap, useLoadScript, Marker, LoadScript, useJsApiLoader } from '@react-google-maps/api';
 import map_api from '../location/api_key';
 import axios from 'axios';
-import { API } from '../api/api_key';
-import { view_post, view_profile } from '../routes/string_routes';
+
+
+import { get_user_post_info, view_post, view_profile } from '../routes/string_routes';
 import { Categories } from '../assets/categories';
 import ProfileImg from '../components/profile_img';
 import LoadingScreen from '../components/Loadind_Screen';
 import RelativeProducts from './relative_products';
+import { useDispatch } from 'react-redux';
+import { setAnotherProfile } from '../app/data/data';
+import AxiosInstance from '../api/axios';
 
 const ViewPost = () => {
     const id = useParams();
@@ -22,6 +26,7 @@ const ViewPost = () => {
     const [Description, setDescription] = useState(null)
     const [post_category, set_post_category] = useState('')
     const Nav = useNavigate();
+    const dispatch = useDispatch()
 
     const [UserProfile, setUserProfile] = useState({
         first_name: null,
@@ -97,13 +102,31 @@ const ViewPost = () => {
     const [Location, setLocation] = useState(null)
     const [LocationLink, setLocationLink] = useState(null)
 
-    const GetPost = async () => {
-        for (const key in UserProfile){  // reset value 
-            setUserProfile({
-                key : null
+
+    useEffect(() => {
+        const GetUserInfomation = async () => {
+            await AxiosInstance.get(get_user_post_info + UserProfile.uuid).then((e) => {
+                if (e.status === 200){
+                    // console.log(e.data.Message)
+                    dispatch(setAnotherProfile(e.data.Message))
+                }
+            }).catch(e => {
+                // console.log(e)
             })
         }
-        await axios.get(API + view_post + post_id).then((e) => {
+        if (UserProfile.uuid){
+            GetUserInfomation()
+        }
+    }, [UserProfile])
+
+
+    const GetPost = async () => {
+        for (const key in UserProfile) {  // reset value 
+            setUserProfile({
+                key: null
+            })
+        }
+        await AxiosInstance.get(view_post + post_id).then((e) => {
             if (e.status === 200) {
                 const data = e.data.Message;
                 const info = data.getinfo[0];
@@ -202,7 +225,7 @@ const ViewPost = () => {
 
             }
         }).catch((e) => {
-
+            console.log(e)
         })
     }
     useEffect(() => {
@@ -245,7 +268,7 @@ const ViewPost = () => {
                                 if (Index === 0) {
                                     setIndex(Imgs.length - 1)
                                 }
-                            }} class="fa-solid fa-arrow-left"></i>
+                            }} className="fa-solid fa-arrow-left"></i>
                             <i onClick={() => {
                                 if (Index < Imgs.length - 1) {
                                     setIndex(Index + 1)
@@ -253,7 +276,7 @@ const ViewPost = () => {
                                 if (Index === Imgs.length - 1) {
                                     setIndex(0)
                                 }
-                            }} class="fa-solid fa-arrow-right"></i>
+                            }} className="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
                 </>
@@ -479,9 +502,9 @@ const ViewPost = () => {
 
     const Googlemap = () => {
         const libraries = ['places']
-        const {isLoaded} = useJsApiLoader({
-            googleMapsApiKey : map_api,
-            libraries : libraries
+        const { isLoaded } = useJsApiLoader({
+            googleMapsApiKey: map_api,
+            libraries: libraries
         })
         if (LocationLink) {
             const LatLng = LocationLink.split('/')
@@ -491,7 +514,7 @@ const ViewPost = () => {
 
             }
             return (
-            
+
                 <>
                     <div className='w-full relative h-full'>
                         {isLoaded && <div>
@@ -510,7 +533,7 @@ const ViewPost = () => {
                                     <Marker position={lat_long} />
                                 </GoogleMap>
                             </div>
-                            </div>}
+                        </div>}
 
                     </div>
 

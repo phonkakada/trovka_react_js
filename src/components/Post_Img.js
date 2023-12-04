@@ -1,5 +1,5 @@
 import React from 'react';
-import { CarCategories, Categories } from '../assets/categories';
+import { Categories } from '../assets/categories';
 import IsEnglish from './language';
 
 

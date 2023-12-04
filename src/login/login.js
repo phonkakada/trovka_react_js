@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import LoginImg from '../assets/images/house.jpg'
 import { Link, useNavigate } from 'react-router-dom';
-import { signup } from '../routes/string_routes';
+import { home, signup } from '../routes/string_routes';
 import LoadingSpinner from '../components/loading_spinner';
-import axios from 'axios';
-import { API } from '../api/api_key';
+import { useDispatch } from 'react-redux';
+import { setLoginState, setStateChange } from '../app/data/data';
+import AxiosInstance from '../api/axios';
 import { login } from '../api/route_api';
-import { SetUUID, setToken } from '../cookie/cookie';
 
 
 export default function Login() {
     document.title = "Login"
+    const dispatch = useDispatch()
 
     const Nav = useNavigate();
+    const fromData = new FormData()
 
     const [email, setemail] = useState(null)
     const [password, setpassword] = useState(null)
@@ -21,25 +23,21 @@ export default function Login() {
 
     const Login = async () => {
         setLoading(true)
-        // HandleLogin({ emailOrphone: EmailorPhone, password: Password }, setonError , setLoading )
-        const user_data = {
-            email: email,
-            password: password
-        }
-        console.log(user_data)
         if (email && password) {
-            await axios.post(API + login, user_data).then((response) => {
-                if (response.status === 200) {
-                    setLoading(false)
-                    setToken(response.data.Message.jwt)
-                    SetUUID(response.data.Message.uuid)
+            fromData.append('email' , email)
+            fromData.append('password' , password)
 
+            await AxiosInstance.post(login, fromData).then(res => {
+                if (res.status === 200) {
+                    dispatch(setStateChange(true))
+                    Nav(home)
+                    setLoading(false)
                 }
-            }).catch((e) => {
+            }).catch(e => {
                 console.log(e)
                 setLoading(false)
-                setonError('Email and Password are invalid')
             })
+
         } else {
             setonError('Email and Password Can\'t be empty')
             setLoading(false)

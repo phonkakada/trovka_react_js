@@ -1,7 +1,6 @@
-import axios from "axios"
-import { API } from "../api_key"
 import { get_all_car, get_all_computer, get_all_motor, get_all_phone, post_car } from "../route_api"
 import { useState } from "react"
+import AxiosInstance from "../axios"
 
 
 
@@ -23,7 +22,7 @@ const GetAllPhones = async (setstatus) => {
     let imgs = [];
     let ids = []
 
-    await axios.get(API + get_all_phone).then((response) => {
+    await AxiosInstance.get(get_all_phone).then((response) => {
         for (let i = 0; i < response.data.length; i++) {
             let id = response.data[i].Post.id
             let price = response.data[i].Post.price

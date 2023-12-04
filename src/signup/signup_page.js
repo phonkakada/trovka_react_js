@@ -6,16 +6,13 @@ import { TypeAnimation } from "react-type-animation";
 import FirstPage from "./signup_1";
 import SecondPage from "./signup_2";
 
+
 const SignUp = () => {
 
   document.title = "Sign up"
   const [Page, setPage] = useState(1);
   const [FirstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
-  const [Name, setName] = useState({
-    first_name: FirstName,
-    last_name: LastName
-  })
   return (
     <>
       <div className="flex">

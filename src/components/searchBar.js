@@ -19,7 +19,7 @@ const SearchBar = () => {
                     <div className="mr-2 ml-2 w-full">  <DropdownMenu arrayData={Prices} setValue={setDefaultPrice} defaultValue={defaultPrice} Type={'Price'} /></div>
                     <div className="mr-2 ml-2  w-full"> <DropdownMenu arrayData={Categories} setValue={setDefaultCategory} defaultValue={defaultCategory} Type={'Category'} /></div>
                     <div className="flex items-center hover:cursor-pointer mr-2  w-full hover:shadow-lg bg-blue-200 h-10 pr-3 pl-3 text-blue-500 text-center justify-center ">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <i className="fa-solid fa-magnifying-glass"></i>
                         <p className="text-slate-500 ml-2 md: ml-155">Serach</p>
                     </div>
                 </div>
