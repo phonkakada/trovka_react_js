@@ -9,8 +9,11 @@ import { setAnotherProfile } from '../app/data/data';
 import LoadingSpinner from './loading_spinner';
 
 
-const Post = ({ Make, Model, Profile, category, Price, ListImg, Owner = false }) => {
+const Post = ({ Make, Model, Year, Date, Hp, CC, category, Price, ListImg, Owner = false }) => {
+    Price = (+(Price + "").split('.')[1]) > 0 ? Price : (Price + "").split(".")[0]
 
+    const ProfileImg = useSelector(state => state.data.ProfileImg)
+    const Profile = useSelector(state => state.data.MyProfile)
 
     const [Display, setDisplay] = useState(false);
 
@@ -28,29 +31,25 @@ const Post = ({ Make, Model, Profile, category, Price, ListImg, Owner = false })
     const HandleUserClickMenuPost = () => {
         setDisplay(!Display)
     }
-
     if (!ListImg) {
         return <LoadingSpinner />
     }
-
-
     return (
         <>
-            <div className="h-full w-full flex mt-14 bg-yellow-50" >
+            <div className="h-full w-full flex mt-14 " >
                 <div className="w-[90%] h-full">
                     <div className="w-full flex h-[15%] items-center">
-                        <div className="w-full flex h-[15%] items-center">
-                            <div className="w-[13%] h-[0] pb-[13%] md:w-[90px] md:pb-[90px] relative rounded-full bg-black overflow-hidden" id={"post"}>
+                        <div className="w-full flex h-[15%] items-center text-start">
+                            <div className="w-[13%] pb-[13%] md:w-[60px] md:pb-[60px] relative rounded-full bg-black overflow-hidden" id={"post"}>
                                 <div className="absolute inset-0">
-                                    {/* <Profile /> */}
+                                    {ProfileImg}
                                 </div>
-
+                            </div>
+                            <div className='ml-3 '>
+                                <p className='font-Playpen md:text-xl md:font-semibold'>{Profile.name}</p>
+                                <p className='font-thin italic text-xs'>{Date.split('T')[0]}</p>
                             </div>
 
-                            {/* <div className="items-center text-start ml-[4%] text-sm md:text-base xl:text-2xl">
-                                <p className="font-semibold">''</p>
-                                <p className="font-extralight">{General_data.date.split('T')[0]}</p>
-                            </div> */}
                         </div>
                         {Owner === true && <div className="text-end">
                             {Display && <i><MenuPosts /></i>}
@@ -58,39 +57,48 @@ const Post = ({ Make, Model, Profile, category, Price, ListImg, Owner = false })
 
                         </div>}
                     </div>
-                    
+
                     <div className="w-full h-[45%] ">
                         <img className="max-h-full max-w-full h-full w-full object-cover" src={ListImg[0]}></img>
 
                     </div>
                     {ListImg.length == 2 && (
-                    <div className='mt-2'>
-                        <img  src={ListImg[1]}></img>
-                    </div> 
+                        <div className='mt-2'>
+                            <img src={ListImg[1]}></img>
+                        </div>
                     )
                     }
                     {ListImg.length > 2 && <div className="w-full h-[25%] mt-2 flex">
                         <div className="h-full w-[49%] ">
                             <img className="max-h-full max-w-full h-full w-full m-auto object-cover" src={ListImg[1]}></img>
                         </div>
-                        <div className="h-full w-[49%] " onClick={(e) => <DisplayFullImage ListImages={ListImg} Start={2} />}>
-                            <img className="max-h-full max-w-full h-full w-full m-auto object-cover ml-[4%]" src={ListImg[2]}></img>
-                            <p className="text-yellow-500 text-4xl mt-[-45%] ">+{ListImg.length - 3}</p>
+                        <div className="bg-yellow-500 w-[49%] relative h-full " onClick={(e) => <DisplayFullImage ListImages={ListImg} Start={2} />}>
+
+                            <img className="max-h-full max-w-full m-auto object-cover ml-3" src={ListImg[2]}></img>
+
+                            {/* <p className="text-yellow-500 text-4xl mt-[-45%] ">{ListImg.length - 3 == 0 ? '' : + " " + ListImg.length}</p> */}
 
                         </div>
                     </div>}
                     <div className="w-[95%] mt-2 h-[15%]">
                         <div className="text-start text-xl items-center flex justify-between">
-                            {/* <p className="font-semibold text-slate-500">{General_data.make} {General_data.model}</p> */}
-                            {/* <p className=" font-semibold bg-yellow-200 p-1 px-2 -skew-x-12 text-blue-500">{General_data.price} $</p> */}
+                            <p className="font-semibold text-slate-500">{Make} {Model}</p>
+                            <p className=" font-semibold bg-yellow-200 p-1 px-2 -skew-x-12 text-blue-500">{Price} $</p>
                         </div>
                         <ul className="text-start flex mt-2 justify-between font-light text-sm md:text-xl">
 
                             {category.toUpperCase() === Categories[2].toUpperCase() &&
-                                <div>
-                                    {/* <li>HP: {Car.Hp}</li>
-                                    <li>CC: {Car.Cc}</li>
-                                    <li>Tax: {Car.Tax}</li> */}
+                                <div className='flex justify-between w-full'>
+                                    <div>
+                                        <li>HP: {Hp}</li>
+                                        <li>CC: {CC}</li>
+                                    </div>
+                                    <div>
+                                        <li>Year: {Year}</li>
+                                    </div>
+                                    <div>
+                                        {/*  */}
+                                    </div>
                                 </div>
                             }
                             {category.toUpperCase() === Categories[3].toUpperCase() &&
@@ -117,6 +125,7 @@ const Post = ({ Make, Model, Profile, category, Price, ListImg, Owner = false })
 
                             </div>
                         </ul>
+                        <p className='italic text-blue-500'>See more</p>
                     </div>
                 </div>
             </div>

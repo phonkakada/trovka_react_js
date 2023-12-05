@@ -7,7 +7,8 @@ const initialState = {
   HomeData: false,
   Uuid: null,
   Token : null,
-  StateChange : false
+  StateChange : false,
+  ProfileImg : null,
 }
 
 export const AppData = createSlice({
@@ -34,11 +35,14 @@ export const AppData = createSlice({
     },
     setStateChange : (state , action) => {
       state.StateChange = action.payload
+    },
+    setProfileImg: (state , action) => {
+      state.ProfileImg = action.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setAnotherProfile, setStateChange ,  setToken ,  setUuid, setMyProfile, setLoginState, setHomeData } = AppData.actions
+export const { setAnotherProfile, setProfileImg ,  setStateChange ,  setToken ,  setUuid, setMyProfile, setLoginState, setHomeData } = AppData.actions
 
 export default AppData.reducer

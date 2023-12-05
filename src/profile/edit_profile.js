@@ -15,14 +15,16 @@ const EditProfile = ({ func }) => {
     const [last_name, setLast_name] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
-    const [Uploading , setUploading] = useState(false)
+    const [Uploading, setUploading] = useState(false)
     const dispatch = useDispatch();
 
     useEffect(() => {  // Assign state value from User data
         setFirst_name(User.first_name)
         setLast_name(User.last_name)
-        setEmail(UserContacts.email)
-        setPhone(UserContacts.phone)
+        if (UserContacts) {
+            setEmail(UserContacts.email)
+            setPhone(UserContacts.phone)
+        }
     }, [])
 
     const User = useSelector(state => state.data.MyProfile)
@@ -30,16 +32,16 @@ const EditProfile = ({ func }) => {
     const HandleUpdateInfo = async () => {
 
         const data = {
-            email : email,
-            phone : phone,
-            first_name : first_name,
-            last_name : last_name
+            email: email,
+            phone: phone,
+            first_name: first_name,
+            last_name: last_name
         }
 
         const Text_Status = document.getElementById('status')
         setUploading(true)
-        await AxiosInstance.put(update_info , data).then(res => {
-            if (res.status === 200){
+        await AxiosInstance.put(update_info, data).then(res => {
+            if (res.status === 200) {
                 // console.log(res.data)
                 dispatch(setStateChange(true))
                 setUploading(false)
@@ -87,7 +89,7 @@ const EditProfile = ({ func }) => {
                         <div className='italic text-red-500 text-xs'>This email is not used for login to your account</div>
                         <div className='mt-2'><InputInformation defualtValue={phone} label={'Phone Number'} setValue={setPhone} /></div>
                         <div className='flex justify-center'>
-                            {Uploading? <button onClick={HandleUpdateInfo} className='w-full text-white bg-slate-300 hover:cursor-not-allowed flex justify-center py-2 mt-5 transition-all duration-500 rounded-3xl border-0 '><LoadingSpinner /></button> : <button onClick={HandleUpdateInfo} className='w-full text-white bg-blue-500 py-2 mt-5 transition-all duration-500 rounded-3xl border-0 hover:text-black hover:bg-transparent hover:border-blue-500 hover:border-2 '>Save Change</button>}
+                            {Uploading ? <button onClick={HandleUpdateInfo} className='w-full text-white bg-slate-300 hover:cursor-not-allowed flex justify-center py-2 mt-5 transition-all duration-500 rounded-3xl border-0 '><LoadingSpinner /></button> : <button onClick={HandleUpdateInfo} className='w-full text-white bg-blue-500 py-2 mt-5 transition-all duration-500 rounded-3xl border-0 hover:text-black hover:bg-transparent hover:border-blue-500 hover:border-2 '>Save Change</button>}
                         </div>
                         <p id='status' className='italic text-red-500 font-thin mt-2 font-Playpen text-sm'></p>
 

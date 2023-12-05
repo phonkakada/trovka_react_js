@@ -9,15 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import LoadingScreen from "../components/Loadind_Screen";
 import EditProfile from "./edit_profile";
 import { addPost, home } from "../routes/string_routes";
+import { setProfileImg } from "../app/data/data";
 
 const Profile = () => {
 
-    const [fileBeginUpload, setfileBeginUpload] = useState(false)
-    const [profile_upload, setProfile_upload] = useState({
-        images: null,
-        uuid: null,
-        ImageLength: null
-    })
     const Nav = useNavigate()
     const dispatch = useDispatch()
 
@@ -49,7 +44,7 @@ const Profile = () => {
     }
 
     const UserContacts = profileData.contacts[0]
-
+    dispatch(setProfileImg(<ProfileImg last_name={profile.last_name} profile_url={profile.profile_url} />))
     document.title = profile.name
     return (
         <>
@@ -71,7 +66,7 @@ const Profile = () => {
                     </center>
                     <div className=" w-full  mt-10">
                         <ul className="text-slate-500">
-                            {UserContacts.phone != null &&
+                            {UserContacts  &&
                                 <Link to={`tel: +855 ${UserContacts.phone}`}><li className="flex items-center">
                                     <i class="fa-solid fa-phone mr-5"></i>
                                     <p>{UserContacts.phone}</p>
@@ -82,7 +77,7 @@ const Profile = () => {
                                 <p>{Location}</p>
                             </li> */}
                             {
-                                UserContacts.email != null &&
+                                UserContacts  &&
                                 <Link to={`mailto: ${UserContacts.email}`}>
                                     <li className="flex items-center mt-5">
                                         <i class="fa-regular fa-envelope mr-5"></i>
@@ -107,7 +102,7 @@ const Profile = () => {
                         <li className="w-1/2 bg-blue-200 hover:cursor-pointer hover:text-slate-100 text-center" onClick={() => HandleChangeButton(AllButtons[5])}><i class="fa-solid fa-heart text-slate-400"> </i></li>
                     </ul>
                     <hr className="mt-2 md:mt-10"></hr> */}
-                    {CurrentButton === AllButtons[1] && <div className="pb-20"><DisplayAllPost profile={ProfileImg}  Name={profile.fullname} /></div>}
+                    {CurrentButton === AllButtons[1] && <div className="pb-20"><DisplayAllPost  /></div>}
                     {/* <Posts />
                     {CurrentButton === AllButtons[2] && <DisplayAllLiked />}
                     {CurrentButton === AllButtons[3] && <DisplayAllShares />}

@@ -101,7 +101,7 @@ const NavBar = () => {
                 dispatch(setMyProfile(null))
             }
         }).catch(e => {
-            console.log(e)
+            // console.log(e)
         })
     }
     return (

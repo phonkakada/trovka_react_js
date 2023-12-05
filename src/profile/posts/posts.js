@@ -51,7 +51,7 @@ const DisplayAllPost = ({ profile, Name }) => {
                 <i class="fa-solid fa-plus mr-2"></i>
                 <p>Post</p>
             </button>
-            <ListPosts PostsData={PostsData} />
+            <ListPosts PostsData={PostsData} Profile={profile} name={Name} />
         </>
     )
 }
@@ -66,21 +66,34 @@ const ListPosts = ({ PostsData }) => {
         var models = [];
         var provinces = []
         var Imgs = [];
-      
-        PostsData.forEach((data , index) => {
+        var ListImgs = [];
+        var dates = [];
+        var Hps = [];
+        var Cc  = [];
+        var years = [];
+
+        PostsData.forEach((data, index) => {
+            if (data.Message[index]) {
                 makes.push(data.Message[index].get_info[0].make)
                 models.push(data.Message[index].get_info[0].model)
+                Hps.push(data.Message[index].get_info[0].hp)
+                Cc.push(data.Message[index].get_info[0].cc)
+                years.push(data.Message[index].get_info[0].year)
+                dates.push(data.Message[index].created_at)
                 prices.push(data.Message[index].price)
-                if(data.Message[index].locations.length != 0){
+                if (data.Message[index].locations.length != 0) {
                     provinces.push(data.Message[index].locations[0].province)
                 }
                 data.Message[index].products.map((e) => Imgs.push(e.product_image_url))
+                ListImgs.push(Imgs)
+                Imgs = [];
+            }
         });
         return (
             <>
                 <center>
                     <div className="w-[350px] h-[400px] sm:w-[500px] sm:h-[650px] md:w-[800px] md:h-[900px] xl:w-[1080px] xl:h-[1080px]">
-                        <div className="p-5">{prices.map((value, index) => <Post category={'Car'} Price={prices[index]} ListImg={Imgs} Make={makes[index]} Model={models[index]} />)}</div>
+                        <div className="p-5">{prices.map((value, index) => <Post Owner={true} Year = {years[index]} category={'Car'} CC={Cc[index]} Hp={Hps[index]}  Date={dates[index]} Price={prices[index]} ListImg={ListImgs[index]} Make={makes[index]} Model={models[index]}  />)}</div>
                     </div>
                     <div className="pb-20"></div>
 

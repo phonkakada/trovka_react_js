@@ -232,24 +232,24 @@ const ViewPost = () => {
         GetPost();
     }, [post_id])
 
-    const DisplayImgs = () => {
-        return (
-            <>
-                <div className='w-full h-full md:hidden'>
-                    <SimpleImageSlider onClick={() => alert(1)} images={Imgs} showNavs={true} height={300} width={`400px`} />
-                </div>
-                <div className='w-full h-full hidden md:block lg:hidden'>
-                    <SimpleImageSlider onClick={() => alert(1)} images={Imgs} showNavs={true} height={300} width={`50%`} />
-                </div>
-                <div className='w-full h-full hidden lg:block'>
-                    <SimpleImageSlider onClick={() => alert(1)} images={Imgs} showNavs={true} height={490} width={`50%`} />
-                </div>
+    // const DisplayImgs = () => {
+    //     return (
+    //         <>
+    //             <div className='w-full h-full md:hidden'>
+    //                 <SimpleImageSlider onClick={() => alert(1)} images={Imgs} showNavs={true} height={300} width={`400px`} />
+    //             </div>
+    //             <div className='w-full h-full hidden md:block lg:hidden'>
+    //                 <SimpleImageSlider onClick={() => alert(1)} images={Imgs} showNavs={true} height={300} width={`50%`} />
+    //             </div>
+    //             <div className='w-full h-full hidden lg:block'>
+    //                 <SimpleImageSlider onClick={() => alert(1)} images={Imgs} showNavs={true} height={490} width={`50%`} />
+    //             </div>
 
 
 
-            </>
-        )
-    }
+    //         </>
+    //     )
+    // }
     const ImagePreview = () => {
         const [Index, setIndex] = useState(0)
         if (Imgs.length !== 0) {
