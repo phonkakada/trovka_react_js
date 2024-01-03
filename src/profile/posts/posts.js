@@ -89,15 +89,22 @@ const ListPosts = ({ PostsData }) => {
                 Imgs = [];
             }
         });
+        const scrollDetect = document.getElementById(`scroll-detect`);
+        window.addEventListener('scroll' , () => {
+            if (scrollDetect){
+                const ps = scrollDetect.getBoundingClientRect();
+                console.log(ps.bottom / 2)
+            }
+        })
         return (
             <>
-                <center>
-                    <div className="w-[350px] h-[400px] sm:w-[500px] sm:h-[650px] md:w-[800px] md:h-[900px] xl:w-[1080px] xl:h-[1080px]">
-                        <div className="p-5">{prices.map((value, index) => <Post Owner={true} Year = {years[index]} category={'Car'} CC={Cc[index]} Hp={Hps[index]}  Date={dates[index]} Price={prices[index]} ListImg={ListImgs[index]} Make={makes[index]} Model={models[index]}  />)}</div>
+                {/* <center> */}
+                    <div className="w-full h-[400px] sm:w-[500px] sm:h-[650px] md:w-[800px] md:h-[900px] xl:w-[1080px] xl:h-[1080px]">
+                        <div className="py-5">{prices.map((value, index) => <div id="scroll-detect"><Post Owner={true}  Key={index} Year = {years[index]} category={'Car'} CC={Cc[index]} Hp={Hps[index]}  Date={dates[index]} Price={prices[index]} ListImg={ListImgs[index]} Make={makes[index]} Model={models[index]}  /></div>)}</div>
                     </div>
                     <div className="pb-20"></div>
 
-                </center>
+                {/* </center> */}
             </>
         )
     }

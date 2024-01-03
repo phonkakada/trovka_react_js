@@ -32,6 +32,7 @@ const GetAllCars = async (setstatus) => {
                 let img = response.data[i].Post.products[j].product_image_url     
                 imgs.push(img)
             }
+            imgs.reverse()
             images.push(imgs)
             imgs = []
             prices.push(parseInt(price))

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import InputValue from "../components/input_value";
 import DropdownMenu from "../../../components/downDownMenu";
-import { CarCategories, Categories, LaptopCategories, MotorCategory, chairs, fuels, generateArrayOfYears, tax_types, touch_screens, transmissions, used, warrantys } from "../../../assets/categories";
+import { CarCategories, LaptopCategories,  generateArrayOfYears, touch_screens, used, warrantys } from "../../../assets/categories";
 
 const PostComputer = ({ fromData }) => {
 
@@ -18,20 +18,18 @@ const PostComputer = ({ fromData }) => {
     const [use, setuse] = useState(used[1])
     const [storage, setStorage] = useState()
     const [battery, setbattery] = useState('')
-    const [speaker, setSpeaker] = useState('')
     const [screen, setScreen] = useState('')
     const [touch_screen, settouch_Screen] = useState(touch_screens[0])
     fromData.append('model', model)
     fromData.append('make', make)
     fromData.append('warranty', warranty)
-    fromData.append('battery' , battery)
+    fromData.append('battery', battery)
     fromData.append('year', year)
     fromData.append('used', use)
     fromData.append('ram', ram)
     fromData.append('cpu', cpu)
     fromData.append('gpu', gpu)
     fromData.append('storage', storage)
-    fromData.append('speaker', speaker)
     fromData.append('screen', screen)
     fromData.append('color', color)
     fromData.append('price', price)
@@ -65,20 +63,19 @@ const PostComputer = ({ fromData }) => {
                     <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2" ><InputValue setValue={setgpu} type={' GPU'} /></div>
                 </div>
 
-                <div className="mt-4 md:flex justify-between">
+                <div className="mt-4 md:mt-0 md:flex justify-between">
                     <div className="md:w-1/2" ><InputValue setValue={setbattery} type={'Battery (mAh)'} /></div>
-                    <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2" ><InputValue setValue={setSpeaker} type={' Speaker (Watt)'} /></div>
+                    <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2" ><InputValue setValue={setScreen} type={' Screen (Inch)'} /></div>
                 </div>
                 <div className="md:flex mt-4 justify-between">
-                    <div className="md:w-1/2" ><InputValue setValue={setScreen} type={' Screen (Inch)'} /></div>
-                    <div className="md:w-1/2 md:ml-2" ><InputValue setValue={setcolor} type={' Color'} /></div>
+
+                    <div className="md:w-1/2" ><InputValue setValue={setcolor} type={' Color'} /></div>
+                    <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2">
+                        <p>Touch Screen</p>
+                        <DropdownMenu defaultValue={touch_screen} setValue={settouch_Screen} arrayData={touch_screens} />
+                    </div>
 
                 </div>
-                <div className="mt-4">
-                    <p>Touch Screen</p>
-                    <DropdownMenu defaultValue={touch_screen} setValue={settouch_Screen} arrayData={touch_screens} />
-                </div>
-
             </div>
         </>
     )

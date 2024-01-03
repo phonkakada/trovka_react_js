@@ -60,18 +60,20 @@ const AddPost = () => {
                     setOnPostError("Successful")
                 }
             }).catch((e) => {
+                console.log(e)
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })
         }
         if (defaultValue === Categories[3]) { // for Motor
             await AxiosInstance.post(post_motor, fromData).then((response) => {
+
                 if (response.status === 200) {
                     setUploading(false)
                     setOnPostError("Successful")
                 }
             }).catch((e) => {
-            //    console.log(e)
+               console.log(e)
                 setUploading(false)
                 setOnPostError("Post Error Please Check all fields are filled !")
             })

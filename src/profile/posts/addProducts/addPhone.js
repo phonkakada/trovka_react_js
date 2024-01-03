@@ -74,9 +74,6 @@ const PostPhone = ({ fromData }) => {
                     <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2" ><InputValue setValue={setfront_camera} type={' Front Camera'} /></div>
                 </div>
                 <div className="md:flex mt-4 justify-between">
-                    <div className="w-full" ><InputValue setValue={setWatt} type={'Power (Watt)'} /></div>
-                </div>
-                <div className="md:flex mt-4 justify-between">
                     <div className="md:w-1/2" ><InputValue setValue={setScreen} type={' Screen (Inch)'} /></div>
                     <div className="md:w-1/2 mt-4 md:mt-0 md:ml-2" ><InputValue setValue={setcolor} type={' Color'} /></div>
                 </div>

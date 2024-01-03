@@ -11,11 +11,9 @@ const GetAllPhones = async (setstatus) => {
     let makes = [];
     let years = [];
     let colors = [];
-    let powers = [];
     let cpus = [];
     let rams = [];
     let watts = [];
-    let speakers = [];
     let storages = [];
     let locations = [];
     let locationsLink = [];
@@ -31,7 +29,6 @@ const GetAllPhones = async (setstatus) => {
             let year = response.data[i].Post.getinfo[0].year
             let ram = response.data[i].Post.getinfo[0].ram
             let storage = response.data[i].Post.getinfo[0].storage
-            let power = response.data[i].Post.getinfo[0].power
             let watt = response.data[i].Post.getinfo[0].watt
             let cpu = response.data[i].Post.getinfo[0].cpu
             let color = response.data[i].Post.getinfo[0].color
@@ -41,6 +38,7 @@ const GetAllPhones = async (setstatus) => {
                 let img = response.data[i].Post.products[j].product_image_url     
                 imgs.push(img)
             }
+            imgs.reverse()
             images.push(imgs)
             imgs = []
             prices.push(parseInt(price))
@@ -50,7 +48,6 @@ const GetAllPhones = async (setstatus) => {
             cpus.push(cpu)
             rams.push(ram)
             watts.push(watt)
-            powers.push(power)
             colors.push(color)
             storages.push(storage)
             locations.push(location)
@@ -66,8 +63,8 @@ const GetAllPhones = async (setstatus) => {
             makes , images ,
             years ,
             rams , locations,
-            locationsLink, speakers,
-            storages,powers , ids
+            locationsLink,
+            storages , ids
         ]
 }
 

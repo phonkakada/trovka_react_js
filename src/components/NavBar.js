@@ -115,7 +115,7 @@ const NavBar = () => {
                         <i class="block fa-solid fa-bars text-3xl text-white md:hidden" id="MenuBar" onMouseOver={(e) => HandleMouseOver()} onMouseOut={(e) => HandleMouseOut()} onClick={(_) => HandleNavbar()}></i>
                         <Link to={home}><p className="hidden text-3xl ml-5 md:block">Logo</p></Link>
                     </div>
-                    <div className="hidden h-full w-1/3 md:block">
+                    <div className="hidden h-full w-1/3 font-Playpen text-slate-700 md:block">
                         <ul className="flex ml-5 h-full items-center w-full justify-between" >
                             <li className="flex"><button onMouseOver={() => HandleDisplayCategories('CategoryBtn')} onClick={() => HandleDisplayCategories('CategoryBtn')}>Categories
 
@@ -166,7 +166,7 @@ const NavBar = () => {
 const CategoriesMenu = () => {
     return (
         <>
-            <div className=" bg-blue-300 w-full h-full overflow-auto overflow-x-hidden no-scrollbar text-start">
+            <div className=" bg-blue-300 font-Playpen w-full h-full overflow-auto overflow-x-hidden no-scrollbar text-start">
                 <p onClick={() => HandleDisplayCategories('Properties')} className="h-10 w-full items-center flex hover:bg-slate-600 hover:text-white justify-between p-5">
                     <p>Properties</p>
                     <i className="fa-solid fa-angle-down"></i></p>

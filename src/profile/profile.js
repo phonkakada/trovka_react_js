@@ -48,8 +48,8 @@ const Profile = () => {
     document.title = profile.name
     return (
         <>
-            <div id="profile" className="w-[100vw]  flex justify-center h-[100vh]">
-                <div className="w-[60%]">
+            <div id="profile" className="mx-10 w-full h-full flex justify-center">
+                <div className="w-full m-20">
                     <center>
                         <div title="Change Profile" className=" w-20 pb-20 mt-10 md:w-24 bg-stone-400 md:pb-24 relative rounded-full overflow-hidden">
                             <div className="absolute w-full h-full inset-0">
@@ -72,10 +72,7 @@ const Profile = () => {
                                     <p>{UserContacts.phone}</p>
                                 </li></Link>
                             }
-                            {/* <li className="flex items-center mt-5">
-                                <i class="fa-solid fa-location-dot mr-5"></i>
-                                <p>{Location}</p>
-                            </li> */}
+                           
                             {
                                 UserContacts  &&
                                 <Link to={`mailto: ${UserContacts.email}`}>
@@ -94,19 +91,9 @@ const Profile = () => {
                     </div>
                     <hr className="mt-5"></hr>
 
-                    {/* <hr className=" mt-5 md:hidden"></hr>
-                    <ul className="w-full z-[1] sticky top-14 flex mt-2 justify-between  md:hidden">
-                        <li className="bg-yellow-500 hover:cursor-pointer hover:text-slate-100 w-1/2 text-center active:text-white underline" onClick={() => HandleChangeButton(AllButtons[1])}><i class="fa-solid fa-signs-post text-slate-400"></i></li>
-                        <li className="bg-blue-200 w-1/2 hover:cursor-pointer hover:text-slate-100 text-center " onClick={() => HandleChangeButton(AllButtons[2])}><i class="fa-solid fa-thumbs-up text-slate-400"></i></li>
-                        <li className="w-1/2 bg-yellow-500 hover:cursor-pointer hover:text-slate-100 text-center" onClick={() => HandleChangeButton(AllButtons[3])}><i class="fa-solid fa-share text-slate-400"></i></li>
-                        <li className="w-1/2 bg-blue-200 hover:cursor-pointer hover:text-slate-100 text-center" onClick={() => HandleChangeButton(AllButtons[5])}><i class="fa-solid fa-heart text-slate-400"> </i></li>
-                    </ul>
-                    <hr className="mt-2 md:mt-10"></hr> */}
+                   
                     {CurrentButton === AllButtons[1] && <div className="pb-20"><DisplayAllPost  /></div>}
-                    {/* <Posts />
-                    {CurrentButton === AllButtons[2] && <DisplayAllLiked />}
-                    {CurrentButton === AllButtons[3] && <DisplayAllShares />}
-                    {CurrentButton === AllButtons[5] && <DisplayAllFollowings />} */}
+                 
                 </div>
             </div>
             <div id="edit-profile" className="top-[15%] justify-center hidden flex w-full h-[80%] absolute">

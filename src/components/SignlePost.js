@@ -9,7 +9,7 @@ import { setAnotherProfile } from '../app/data/data';
 import LoadingSpinner from './loading_spinner';
 
 
-const Post = ({ Make, Model, Year, Date, Hp, CC, category, Price, ListImg, Owner = false }) => {
+const Post = ({ Make, Model, Year, Date, Key ,  Hp, CC, category, Price, ListImg, Owner = false }) => {
     Price = (+(Price + "").split('.')[1]) > 0 ? Price : (Price + "").split(".")[0]
 
     const ProfileImg = useSelector(state => state.data.ProfileImg)
@@ -34,13 +34,15 @@ const Post = ({ Make, Model, Year, Date, Hp, CC, category, Price, ListImg, Owner
     if (!ListImg) {
         return <LoadingSpinner />
     }
+
+
     return (
         <>
-            <div className="h-full w-full flex mt-14 " >
-                <div className="w-[90%] h-full">
-                    <div className="w-full flex h-[15%] items-center">
+            <div className="h-full w-full flex mt-14  " >
+                <div className="w-full h-full">
+                    <div className="w-full flex h-full items-center">
                         <div className="w-full flex h-[15%] items-center text-start">
-                            <div className="w-[13%] pb-[13%] md:w-[60px] md:pb-[60px] relative rounded-full bg-black overflow-hidden" id={"post"}>
+                            <div className="w-[10%] pb-[10%] md:w-[60px] md:pb-[60px] relative rounded-full bg-black overflow-hidden" id={"post"}>
                                 <div className="absolute inset-0">
                                     {ProfileImg}
                                 </div>
@@ -58,7 +60,7 @@ const Post = ({ Make, Model, Year, Date, Hp, CC, category, Price, ListImg, Owner
                         </div>}
                     </div>
 
-                    <div className="w-full h-[45%] ">
+                    <div className="w-full h-1/2 mt-2 ">
                         <img className="max-h-full max-w-full h-full w-full object-cover" src={ListImg[0]}></img>
 
                     </div>
@@ -68,15 +70,15 @@ const Post = ({ Make, Model, Year, Date, Hp, CC, category, Price, ListImg, Owner
                         </div>
                     )
                     }
-                    {ListImg.length > 2 && <div className="w-full h-[25%] mt-2 flex">
+                    {ListImg.length > 2 && <div className="w-full  h-[150px] md:h-[300px] mt-2 flex">
                         <div className="h-full w-[49%] ">
                             <img className="max-h-full max-w-full h-full w-full m-auto object-cover" src={ListImg[1]}></img>
                         </div>
-                        <div className="bg-yellow-500 w-[49%] relative h-full " onClick={(e) => <DisplayFullImage ListImages={ListImg} Start={2} />}>
+                        <div className="w-[49%] relative ml-[2%] h-full " onClick={(e) => <DisplayFullImage ListImages={ListImg} Start={2} />}>
 
-                            <img className="max-h-full max-w-full m-auto object-cover ml-3" src={ListImg[2]}></img>
+                            <img className="w-full h-full object-cover" src={ListImg[2]}></img>
 
-                            {/* <p className="text-yellow-500 text-4xl mt-[-45%] ">{ListImg.length - 3 == 0 ? '' : + " " + ListImg.length}</p> */}
+                            <p className="text-yellow-500 text-4xl mt-[-45%] ">{ListImg.length - 3 == 0 ? '' : + " " + ListImg.length}</p>
 
                         </div>
                     </div>}
@@ -129,7 +131,7 @@ const Post = ({ Make, Model, Year, Date, Hp, CC, category, Price, ListImg, Owner
                     </div>
                 </div>
             </div>
-            <hr className="mt-14 md:mt-5 xl:mt-10"></hr>
+            <hr className="mt-14 md:mt-5 xl:mt-10" id={`scroll-detect-${Key}`}></hr>
         </>
     )
 }
